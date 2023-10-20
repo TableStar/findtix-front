@@ -1,0 +1,20 @@
+.banner-section {
+    background-image: url("https://assets-global.website-files.com/633477637a686d796f22d5a0/6347dab01e23fef85fb0d3f8_63457b651fc7f5b5a272591f_See%2Bhow%2Bto%2Bstop%2Bslow%2Bnights%2Bwith%2Bthese%2Brestaurant%2Band%2Bbar%2Bevent%2Bideas.jpg");
+    background-size: 100% auto;
+}
+
+.tabs-area button {
+    color: gray;
+}
+
+.tabs-area button:hover{
+    color: black;
+    border-bottom: 2px solid black;
+    border-radius: 1px;
+}
+
+.tabs-area button.active {
+    color: #3D64FF;
+    border-bottom: 2px solid #3D64FF;
+    border-radius: 1px;
+}

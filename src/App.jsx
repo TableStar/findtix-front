@@ -1,20 +1,11 @@
 import { useState } from 'react'
 import './App.css'
+import { Route, Routes } from 'react-router-dom'
+import LandingPage from './pages/LandingPage'
 
 function App() {
-
-  let databaseEvent = [{
-    eventId: "",
-    eventName: "",
-    eventDate: "",
-    eventTime: "",
-    eventLocation: "",
-    eventDescription: "",
-    eventprice: 0,
-  }]
-
   let databaseUser = [{
-    userId : "",
+    userId: "",
     username: "",
     userFullName: "",
     userEmail: "",
@@ -24,25 +15,21 @@ function App() {
     userType: "", // type ada creator / attendee saja
   }]
 
-  let databaseTransaction = [
-    {
-      userId: "",
-      eventId: "",
-      transactionAmount: 0,
-      transactionDate: "",
-    }
-  ]
+  let databaseTransaction = [{
+    userId: "",
+    eventId: "",
+    transactionAmount: 0,
+    transactionDate: "",
+  }]
 
 
 
   return (
-    <>
       <div>
-        <h1 className="text-3xl font-bold underline">
-          Hello world!
-        </h1>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+        </Routes>
       </div>
-    </>
   )
 }
 
