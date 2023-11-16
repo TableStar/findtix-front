@@ -1,45 +1,74 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
+import { axiosInstance } from "../../config/axios";
+import { API_URL, setToken } from "../../helper";
+import { useNavigate } from "react-router-dom";
 
 const accountSlice = createSlice({
-  name: "account",
+  name: "auths",
   initialState: {
+    token: localStorage.getItem("token"),
+    isAuthenticated: null,
+    loading: true,
     username: "",
-    password: "",
     email: "",
   },
   reducers: {
-    login: (state, action) => {
-      console.log("SliceAccount", action.payload);
+    userLoaded: (state, action) => {
+      state.isAuthenticated = true;
+      state.loading = false;
       state.username = action.payload.username;
-      state.password = action.payload.password;
       state.email = action.payload.email;
     },
     logout: (state, action) => {
-      state = { username: "", password: "", email: "" };
+      state = {
+        token: localStorage.removeItem("token"),
+        isAuthenticated: null,
+        loading: true,
+        username: "",
+        email: "",
+      };
     },
   },
 });
 
-export const { login, logout } = accountSlice.actions;
+export const { userLoaded, logout } = accountSlice.actions;
 export default accountSlice.reducer;
 
 //Middleware
-export const getAccountLogin = () => {
+export const keepLogin = () => {
   return async (dispatch) => {
     try {
-      const dataStorage = await JSON.parse(localStorage.getItem("dataLogin"));
-      const resGET = await API_CALL.get(
-        `/account?username=${dataStorage.username}&password=${dataStorage.password}`
-      );
-      console.log("This IS Middleware", resGET.data[0]);
-      if (!resGET.data[0]) {
-        dispatch(logout());
-      } else {
-        dispatch(login(resGET.data[0]));
-        localStorage.setItem("dataLogin", JSON.stringify(resGET.data[0]));
-      }
+      const response = await axiosInstance.get(API_URL + "/auths/keeplogin");
+      dispatch(userLoaded(response.data.result));
+      setToken(response.data.result.token);
+      
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.message.includes("token is empty"));
+      if (error.response.data.message.includes("token is empty")) {
+        dispatch(logout());
+      }
     }
   };
 };
+// export const getAccountLogin = () => {
+//   return async (dispatch) => {
+//     try {
+
+//       const resGET = await API_CALL.post(
+//         `/account/auth`,{
+
+//         }
+//       );
+//       console.log("This IS Middleware", resGET.data[0]);
+//       if (!resGET.data[0]) {
+//         dispatch(logout());
+//       } else {
+//         dispatch(login(resGET.data[0]));
+//         localStorage.setItem("dataLogin", JSON.stringify(resGET.data[0]));
+//       }
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
+// };

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-// import { API_URL, loginBg_URL } from "../helper";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import InputBoxForm from "../../components/InputBoxForm";
+import { API_URL } from "../../helper";
+import { userLoaded } from "../../redux/slice/accountSlice";
 // import { loginAction } from "../redux/action/accountAction";
 
 const LandingPageLogin = () => {
@@ -12,37 +13,26 @@ const LandingPageLogin = () => {
   const [inEmail, setInEmail] = useState("");
   const [focusUsername, setFocusUsername] = useState(false);
   const [focusPassword, setFocusPassword] = useState(false);
-  const hasRegisterGlobal = useSelector((state) => state.hasRegisterReducer);
-  const accountGlobal = useSelector((state) => state.accountReducer);
+
+  const userGlobal = useSelector((state) => state.accountSliceReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const displayHasRegister = () => {
-    if (hasRegisterGlobal === true) {
-      return (
-        <p className=" text-black text-sm">
-          Your account have been registered. Now you can login
-        </p>
-      );
-    } else {
-      return <div className=" h-5"></div>;
+  const onLogin = async (username, password) => {
+    try {
+      const response = await axios.post(API_URL + `/auths/login`, {
+        username: inUsername,
+        password: inPassword,
+      });
+      console.log("check user", response.data.result.token);
+      if (response.data.result.token) {
+        dispatch(userLoaded(response.data.result));
+        localStorage.setItem("token", response.data.result.token);
+      }
+      navigate("/");
+    } catch (error) {
+      console.log(error.response.data);
     }
   };
-  // const onLogin = () => {
-  //   axios
-  //     .get(API_URL + `/account?username=${inUsername}&password=${inPassword}`)
-  //     .then((response) => {
-  //       console.log("check user", response.data);
-  //       if (!response.data.length) {
-  //         alert("Account Is Not Registered");
-  //       } else {
-  //         localStorage.setItem("dataAccount", JSON.stringify(response.data[0]));
-  //         dispatch(loginAction(response.data[0]));
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
   // useEffect(() => {
   //   if (accountGlobal.username && accountGlobal.password) {
   //     navigate("/");
@@ -53,28 +43,38 @@ const LandingPageLogin = () => {
   //     navigate("/");
   //   }
   // }, []);
+
+  useEffect(() => {
+    if (userGlobal.user) {
+      navigate("/");
+    }
+  }, [userGlobal.user]);
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
-        <main className="relative block h-16 lg:col-span-5 lg:h-full xl:col-span-6">
+        <main className=" hidden relative  h-16 lg:block lg:col-span-5 lg:h-full xl:col-span-6">
           <img
             alt="Pattern"
             src="https://images.pexels.com/photos/625644/pexels-photo-625644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-screen w-full object-cover overflow-hidden"
           />
         </main>
 
         <aside className="flex items-center justify-center px-4 py-4 sm:px-6 lg:col-span-7 lg:px-12 lg:py-8 xl:col-span-6">
           <div className=" flex flex-col justify-center items-center lg:items-baseline h-full w-full ">
-            <h2 className="text-2xl font-bold leading-7 text-black sm:truncate sm:text-3xl sm:tracking-tight">
-              Login
-            </h2>
+            <div className=" ps-8">
+              <p className="font-bold text-base md:text-2xl">
+                Find<span className="font-black text-[#d2633b]">TIX</span>
+              </p>
+              <h2 className="text-2xl font-bold leading-7 text-black sm:truncate sm:text-3xl sm:tracking-tight">
+                Login
+              </h2>
+            </div>
             <form
               className={
                 "bg-white  rounded-md max-h-fit w-10/12 px-8 pt-6 pb-8 mb-4 "
               }
             >
-              {displayHasRegister()}
               <div className="mb-5">
                 <InputBoxForm
                   htmlName="name"
@@ -89,7 +89,7 @@ const LandingPageLogin = () => {
                 />
               </div>
               <div className="mb-6">
-              <InputBoxForm
+                <InputBoxForm
                   htmlName="password"
                   placeholderText="Password"
                   focusState={focusPassword}
@@ -104,7 +104,7 @@ const LandingPageLogin = () => {
                       : ``
                   }`}
                 />
-                {focusPassword&&inPassword.length <= 0 ? (
+                {focusPassword && inPassword.length <= 0 ? (
                   <p className="text-red-500 text-xs italic">
                     Please enter a password.
                   </p>
@@ -112,12 +112,13 @@ const LandingPageLogin = () => {
                   <div className=" h-4"></div>
                 )}
               </div>
-              <div className="flex items-center justify-between">
+
+              <div className="flex flex-col gap-y-2 justify-between">
                 <button
-                  className=" bg-orange-500 hover:bg-orange-600 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className=" bg-orange-500 hover:bg-orange-600 text-black w-full lg:w-80 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="button"
                   onClick={() => {
-                    // onLogin();
+                    onLogin();
                   }}
                 >
                   Login

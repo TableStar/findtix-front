@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-// import { API_URL, loginBg_URL } from "../helper";
-//import axios from "axios";
+
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import InputBoxForm from "../../components/InputBoxForm";
 //import { hasRegisterAction } from "../redux/action/hasRegisterAction";
 import { Dialog } from "@headlessui/react";
 import ModalForRegister from "../../components/ModalForRegister";
+import { API_URL } from "../../helper";
+import { GoAlertFill } from "react-icons/go";
 
 const LandingPageRegister = () => {
   const [inUsername, setInUsername] = useState("");
@@ -60,42 +62,33 @@ const LandingPageRegister = () => {
   //     });
   // };
 
-  // const saveRegister = async () => {
-  //   if (inUsername && inEmail && inPassword) {
-  //     if (inPassword.length < 7) {
-  //       alert(` Error!!\n Password must contain 8 or more characters`);
-  //     } else if (!inEmail.includes("@")) {
-  //       alert(` Error!!\n ${inEmail} is not a valid email`);
-  //     } else {
-  //       try {
-  //         const response = await Promise.all(
-  //           [axios.get(API_URL + `/account?username=${inUsername}`)],
-  //           [axios.get(API_URL + `/account?email=${inEmail}`)]
-  //         );
-  //         const dataRes = response.map((response) => response.data);
-  //         console.log("This is Data", dataRes);
-  //         if (!dataRes[0].length) {
-  //           await axios.post(API_URL + `/account`, {
-  //             username: inUsername,
-  //             email: inEmail,
-  //             password: inPassword,
-  //             img: "",
-  //           });
-  //           dispatch(hasRegisterAction(true));
-  //           navigate("/landing/login");
-  //         } else {
-  //           return alert(
-  //             `Error!!\nEither your Email or Username has been used`
-  //           );
-  //         }
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     }
-  //   } else {
-  //     return alert("Please fill all information");
-  //   }
-  // };
+  const saveRegister = async (selectedRole) => {
+    if (inUsername && inEmail && inPassword && inFirstName && inLastName) {
+      // if (!inEmail.includes("@")) {
+      //   alert(` Error!!\n ${inEmail} is not a valid email`);
+      // } else
+      try {
+        const response = await axios.post(API_URL + `/auths/register`, {
+          username: inUsername,
+          email: inEmail,
+          password: inPassword,
+          passwordConfirm: inPasswordConfirm,
+          firstName: inFirstName,
+          lastName: inLastName,
+          role: selectedRole,
+        });
+        console.log(response);
+        if (response.data.result.token) {
+          localStorage.setItem("token", response.data.result.token);
+        }
+        navigate("/auth/login");
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      return alert("Please fill all information");
+    }
+  };
 
   // useEffect(() => {
   //   getAccountUsername();
@@ -115,9 +108,24 @@ const LandingPageRegister = () => {
         </aside>
         <main className="flex items-center justify-center px-4 py-4 sm:px-6 lg:col-span-7 lg:px-8 lg:py-6 xl:col-span-6">
           <div className="flex flex-col items-center lg:items-baseline h-full w-full  ">
-            <h2 className="text-2xl font-bold leading-7 text-black sm:truncate sm:text-3xl sm:tracking-tight">
-              Create An Account
-            </h2>
+            {/* <div className="w-96 h-16 p-4 bg-orange-100 rounded-xl justify-start items-center gap-3 inline-flex">
+              <GoAlertFill className="w-9 h-9 relative" />
+              <div className="grow shrink basis-0 text-red-900 text-xl font-medium font-['Roboto'] leading-snug">
+                lorem ipsum dolor sit amet
+              </div>
+              <div className="w-7 h-7 relative">
+                <div className="w-1.5 h-1.5 left-[11.37px] top-[11.37px] absolute bg-neutral-700 bg-opacity-0 rounded-full" />
+                <div className="w-7 h-7 left-0 top-0 absolute" />
+              </div>
+            </div> */}
+            <div className=" ps-8">
+              <p className=" font-bold text-base md:text-2xl">
+                Find<span className="font-black text-[#d2633b]">TIX</span>
+              </p>
+              <h2 className=" text-xl font-bold leading-7 text-black sm:truncate sm:text-3xl sm:tracking-tight">
+                Create An Account
+              </h2>
+            </div>
             <form className="bg-white justify-center items-center  rounded-md max-h-fit w-96 px-8 pt-6 pb-8 mb-2 ">
               <div className="pb-2 mb-2 md:pb-0 flex flex-col">
                 <InputBoxForm
@@ -131,7 +139,7 @@ const LandingPageRegister = () => {
                   }}
                   names="name"
                   inputType="text"
-                  lgWidth="w-80"
+                  className={`lg:w-80`}
                 />
                 {existingUsername ? (
                   <p className="text-red-500 text-xs italic">
@@ -244,7 +252,6 @@ const LandingPageRegister = () => {
                   className="bg-orange-500 hover:bg-orange-600 text-black font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline"
                   type="button"
                   onClick={() => {
-                    // saveRegister();
                     setIsOpen(true);
                   }}
                 >
@@ -255,7 +262,15 @@ const LandingPageRegister = () => {
                   onClose={() => setIsOpen(false)}
                   className="relative z-50"
                 >
-                  <ModalForRegister />
+                  <ModalForRegister
+                    onClickforX={() => setIsOpen(false)}
+                    onClickForAttendee={() => {
+                      saveRegister("attendee");
+                    }}
+                    onClickForCreator={() => {
+                      saveRegister("creator");
+                    }}
+                  />
                 </Dialog>
               </div>
             </form>

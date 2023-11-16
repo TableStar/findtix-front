@@ -10,7 +10,7 @@ const InputBoxForm = (props) => {
       <label
         htmlFor={`${props.htmlName}`}
         className={`${
-          props.focusState || props.labelState.length > 0 ? ` block` : `hidden`
+          props.focusState || props.labelState?.length > 0 ? ` block` : `hidden`
         } h-full input-label ${
           props.focusState ? `text-blue-500` : `text-gray-500`
         }  text-xs select-none leading-none`}
@@ -26,6 +26,7 @@ const InputBoxForm = (props) => {
           onBlur={() => props.setFocusState(false)}
           onChange={props.onChanger}
           placeholder={props.focusState ? `` : props.placeholderText}
+          defaultValue={props.defaultValue}
         />
       </div>
     </div>
