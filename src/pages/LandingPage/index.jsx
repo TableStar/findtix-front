@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import CategoryButton from "../../components/CategoryButton";
 import LayoutPage from "../../components/LayoutPage";
 import Tabs from "../../components/Tabs";
-import "./style.css"
+import "./style.css";
 import EventCards from "../../components/EventCards";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,7 @@ const LandingPage = () => {
     const tabsType = ["All", "Online", "Free", "Today", "Tomorrow", "This week", "This month", "Music", "Health"]
     const eventDatabase = useSelector((state) => { return state.eventReducer.events })
     const categoryDatabase = useSelector((state) => { return state.categoryReducer.categories })
+    const userGlobal = useSelector((state) => state.accountSliceReducer);
 
     const [activeTab, setActiveTab] = React.useState("All")
     useEffect(() => {
@@ -118,6 +119,7 @@ const LandingPage = () => {
             </section>
         </div>
     </LayoutPage>
-}
+  );
+};
 
 export default LandingPage;

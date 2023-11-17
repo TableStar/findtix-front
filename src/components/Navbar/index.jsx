@@ -7,11 +7,13 @@ import { BiHelpCircle } from "react-icons/bi"
 import { VscAccount } from "react-icons/vsc";
 import { useNavigate } from "react-router-dom"
 import SearchModal from "../SearchModal"
+import { useSelector } from "react-redux";
 
 const Navbar = (props) => {
     const [helpVisible, setHelpVisible] = React.useState(false)
     const [smMenu, setSmMenu] = React.useState(false)
     const [isLoggedIn, setIsLoggedIn] = React.useState(true)
+    const userGlobal = useSelector((state) => state.accountSliceReducer);
     const navigate = useNavigate()
     // KALAU SUDAH LOGIN, NAVBAR KASIH PROFILE DAN NANTI NAVIGATE(/userdash)
     return (
