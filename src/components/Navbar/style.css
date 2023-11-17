@@ -1,16 +1,19 @@
+.navbar-btn>* {
+    transition: 0.2s ease-out;
+}
+
 .navbar-btn>:hover,
-.help-content>:hover {
+.dropdown-content>:hover {
     background-color: #f4f2f8;
 }
 
 .navbar-btn>* {
-    padding: 10px 20px 10px 20px;
     border-radius: 50px;
 }
 
-.help-content {
+.dropdown-content {
     box-shadow: 0px 1px 1px 1px rgba(96, 96, 96, 0.4);
 }
-.help-content>* {
+.dropdown-content>* {
     padding: 15px;
 }
