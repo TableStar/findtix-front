@@ -21,6 +21,7 @@ const accountSlice = createSlice({
       state.email = action.payload.email;
     },
     logout: (state, action) => {
+      console.log("MASUK LOGOUT");
       state = {
         token: localStorage.removeItem("token"),
         isAuthenticated: null,

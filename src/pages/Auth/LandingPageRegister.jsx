@@ -119,7 +119,7 @@ const LandingPageRegister = () => {
               </div>
             </div> */}
             <div className=" ps-8">
-              <p className=" font-bold text-base md:text-2xl">
+              <p className=" font-bold text-base md:text-2xl cursor-pointer" onClick={() => { navigate("/") }}>
                 Find<span className="font-black text-[#d2633b]">TIX</span>
               </p>
               <h2 className=" text-xl font-bold leading-7 text-black sm:truncate sm:text-3xl sm:tracking-tight">
@@ -209,11 +209,10 @@ const LandingPageRegister = () => {
                   onChanger={(e) => setInPassword(e.target.value)}
                   names="password"
                   inputType="password"
-                  className={` lg:w-80 ${
-                    inPassword.length <= 7 && inPassword.length > 0
+                  className={` lg:w-80 ${inPassword.length <= 7 && inPassword.length > 0
                       ? `border-2 border-red-500 `
                       : ``
-                  }`}
+                    }`}
                 />
                 {inPassword.length <= 7 && inPassword.length >= 1 ? (
                   <p className="text-red-500 text-xs italic">
@@ -233,11 +232,10 @@ const LandingPageRegister = () => {
                   onChanger={(e) => setInPasswordConfirm(e.target.value)}
                   names="confirmPassword"
                   inputType="password"
-                  className={` lg:w-80 ${
-                    inPassword !== inPasswordConfirm && inPassword.length >= 1
+                  className={` lg:w-80 ${inPassword !== inPasswordConfirm && inPassword.length >= 1
                       ? `border-2 border-red-500 `
                       : ``
-                  }`}
+                    }`}
                 />
                 {inPassword.length >= 1 && inPassword !== inPasswordConfirm ? (
                   <p className="text-red-500 text-xs italic">

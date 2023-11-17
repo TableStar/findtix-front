@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import InputBoxForm from "../../components/InputBoxForm";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { BiSolidPencil } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProps } from "../../redux/slice/userSlice";
@@ -12,6 +12,7 @@ import { getPic, setProfilePic } from "../../redux/slice/picSlice";
 import { FaTrashCan } from "react-icons/fa6";
 
 const UserDash = () => {
+  const navigate = useNavigate();
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const userPropsGlobal = useSelector(
     (state) => state.userSliceReducer.userProps
@@ -105,7 +106,7 @@ const UserDash = () => {
     <div className="flex flex-row">
       <div className="fixed flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 w-full h-screen max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
         <div className="mb-2 p-4">
-          <p className="font-bold text-base md:text-2xl">
+          <p className="font-bold text-base md:text-2xl cursor-pointer" onClick={()=> {navigate("/")}}>
             Find<span className="font-black text-[#d2633b]">TIX</span>
           </p>
         </div>

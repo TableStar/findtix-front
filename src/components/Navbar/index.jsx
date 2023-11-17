@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import "./style.css"
 import { AiOutlineMenu } from "react-icons/ai"
 import { IoIosArrowDown, IoIosArrowUp, IoIosHelpCircleOutline } from "react-icons/io"
@@ -7,14 +7,24 @@ import { BiHelpCircle } from "react-icons/bi"
 import { VscAccount } from "react-icons/vsc";
 import { useNavigate } from "react-router-dom"
 import SearchModal from "../SearchModal"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/slice/accountSlice"
 
 const Navbar = (props) => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     const [helpVisible, setHelpVisible] = React.useState(false)
     const [smMenu, setSmMenu] = React.useState(false)
-    const [isLoggedIn, setIsLoggedIn] = React.useState(true)
+    const [isLoggedIn, setIsLoggedIn] = React.useState(false)
     const userGlobal = useSelector((state) => state.accountSliceReducer);
-    const navigate = useNavigate()
+    useEffect(() => {
+        if (userGlobal.username) {
+            setIsLoggedIn(true)
+        } else {
+            setIsLoggedIn(false)
+        }
+    }, [userGlobal.username])
+    console.log(userGlobal);
     // KALAU SUDAH LOGIN, NAVBAR KASIH PROFILE DAN NANTI NAVIGATE(/userdash)
     return (
         <section className="navbar flex flex-row justify-between items-center bg-white
@@ -34,8 +44,12 @@ const Navbar = (props) => {
                         <div>My tickets</div>
                         <div>Create Events</div>
                         <div>Find Events</div>
-                        <div>My account</div>
-                        <div>Log out</div>
+                        <div onClick={() => { navigate("/userdash") }}>My account</div>
+                        <div onClick={() => {
+                            dispatch(logout())
+                            setIsLoggedIn(false)
+                            navigate("/")
+                        }}>Log out</div>
                     </div>
                 </div>
             </div> :
@@ -51,8 +65,8 @@ const Navbar = (props) => {
                             <div>Contact your event organizer</div>
                         </div>
                     </div>
-                    <button className="px-2 py-4">Log In</button>
-                    <button className="px-2 py-4">Sign Up</button>
+                    <button className="px-2 py-4" onClick={() => { navigate(`/auth/login`) }}>Log In</button>
+                    <button className="px-2 py-4" onClick={() => { navigate(`/auth/register`) }}>Sign Up</button>
                     <div className="md:hidden relative flex cursor-pointer p-0">
                         <button className="p-4" onClick={() => { setSmMenu(!smMenu) }}>
                             <AiOutlineMenu fontSize={"20px"} />

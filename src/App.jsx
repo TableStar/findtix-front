@@ -13,15 +13,16 @@ import { keepLogin, logout } from "./redux/slice/accountSlice";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 
 function App() {
-   const userGlobal = useSelector((state) => state.accountSliceReducer);
+  const userGlobal = useSelector((state) => state.accountSliceReducer);
   const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     // dispatch(getEvents());
     dispatch(getCategories());
     if (!userGlobal.token && !localStorage.token) {
       dispatch(logout());
     } else if (userGlobal.token) {
+      console.log("MASUK KEEP LOGIN");
       dispatch(keepLogin());
     }
     // if (!userGlobal.token) {
@@ -34,7 +35,6 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/e/:id" element={<EventPage />} />
-
         <Route path="/auth/login" element={<LandingPageLogin />} />
         <Route path="/auth/register" element={<LandingPageRegister />} />
         <Route path="/userdash" element={<UserDash />} />

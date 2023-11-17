@@ -119,7 +119,6 @@ const LandingPage = () => {
             </section>
         </div>
     </LayoutPage>
-  );
 };
 
 export default LandingPage;
