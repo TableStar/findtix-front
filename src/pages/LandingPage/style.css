@@ -1,6 +1,8 @@
 .banner-section {
-    background-image: url("https://assets-global.website-files.com/633477637a686d796f22d5a0/6347dab01e23fef85fb0d3f8_63457b651fc7f5b5a272591f_See%2Bhow%2Bto%2Bstop%2Bslow%2Bnights%2Bwith%2Bthese%2Brestaurant%2Band%2Bbar%2Bevent%2Bideas.jpg");
+    /* background-image: url("https://assets-global.website-files.com/633477637a686d796f22d5a0/6347dab01e23fef85fb0d3f8_63457b651fc7f5b5a272591f_See%2Bhow%2Bto%2Bstop%2Bslow%2Bnights%2Bwith%2Bthese%2Brestaurant%2Band%2Bbar%2Bevent%2Bideas.jpg");
+    background-image: url("../../assets/25a38e26b1ef7e31365d99862199fffe-Eventbrite_Halloween_HomepageB_1919x543.webp"); */
     background-size: 100% auto;
+    background-repeat: no-repeat;
 }
 
 .tabs-area button {
@@ -17,4 +19,13 @@
     color: #3D64FF;
     border-bottom: 2px solid #3D64FF;
     border-radius: 1px;
+}
+
+.content-event-list>button {
+    transition: 0.2s ease-out;
+}
+
+.content-event-list>button:hover {
+    border-color: rgb(100 116 139);
+    background-color: rgb(244, 244, 244);
 }

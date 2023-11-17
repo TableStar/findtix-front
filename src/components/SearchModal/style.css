@@ -1,0 +1,35 @@
+div.search-modal {
+    position: fixed;
+    top: 100vh;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: top 1s ease-in-out;
+}
+
+body:target div.search-modal{
+    top: 0;
+}
+
+.search-modal-btn:hover {
+    background-color: #f4f2f8;
+    border-radius: 50px;
+}
+
+.search-input>input{
+    transition: 0.3s ease-out;
+}
+
+.search-input>input:focus{
+    outline: none;
+    border-color: #d2633b;
+}
+
+.search-tags {
+    transition: 0.2s ease-in-out;
+}
+
+.search-tags:hover {
+    background-color: #dfdce5;
+}
