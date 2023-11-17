@@ -1,35 +1,26 @@
-import { useState } from 'react'
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
+import EventPage from './pages/EventPage'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { getEvents } from './redux/slice/eventSlice'
+import { getCategories } from './redux/slice/categorySlice'
 
 function App() {
-  let databaseUser = [{
-    userId: "",
-    username: "",
-    userFullName: "",
-    userEmail: "",
-    userPhone: "",
-    userLocation: "",
-    userPicture: "",
-    userType: "", // type ada creator / attendee saja
-  }]
-
-  let databaseTransaction = [{
-    userId: "",
-    eventId: "",
-    transactionAmount: 0,
-    transactionDate: "",
-  }]
-
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    // dispatch(getEvents());
+    dispatch(getCategories());
+  }, [])
 
   return (
-      <div>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-        </Routes>
-      </div>
+    <div>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/e/:id" element={<EventPage />} />
+      </Routes>
+    </div>
   )
 }
 
