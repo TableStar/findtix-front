@@ -10,6 +10,7 @@ import { BsPersonFill } from "react-icons/bs";
 import axios from "axios";
 import { getPic, setProfilePic } from "../../redux/slice/picSlice";
 import { FaTrashCan } from "react-icons/fa6";
+import { keepLogin } from "../../redux/slice/accountSlice";
 
 const UserDash = () => {
   const navigate = useNavigate();
@@ -86,10 +87,14 @@ const UserDash = () => {
     }
   };
   console.log(
-    "🚀 ~ file: UserDash.jsx:19 ~ UserDash ~ userPropsGlobal:",
-    userPropsGlobal
+    "🚀 ~ file: UserDash.jsx:19 ~ UserDash ~ userGlobal:",
+    userGlobal
   );
   useEffect(() => {
+    dispatch(keepLogin())
+    // if (!userGlobal?.token) {
+    //   navigate("/auth/login")
+    // }
     dispatch(getPic());
     dispatch(getUserProps());
   }, []);

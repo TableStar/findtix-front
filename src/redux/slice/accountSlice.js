@@ -15,6 +15,7 @@ const accountSlice = createSlice({
   },
   reducers: {
     userLoaded: (state, action) => {
+      state.token=action.payload.token
       state.isAuthenticated = true;
       state.loading = false;
       state.username = action.payload.username;
@@ -45,8 +46,10 @@ export const keepLogin = () => {
       setToken(response.data.result.token);
       
     } catch (error) {
-      console.log(error.response.data.message.includes("token is empty"));
-      if (error.response.data.message.includes("token is empty")) {
+      if (
+        error.response.data.message.toLowerCase().includes("invalid") ||
+        error.response.data.message.toLowerCase().includes("empty")
+      ) {
         dispatch(logout());
       }
     }
