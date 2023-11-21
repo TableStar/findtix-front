@@ -5,6 +5,8 @@ import picSliceReducer from "./slice/picSlice";
 
 import eventReducer from "./slice/eventSlice"
 import categoryReducer from "./slice/categorySlice"
+import cityReducer from "./slice/citySlice"
+
 
 const globalState = configureStore({
   reducer: {
@@ -12,7 +14,8 @@ const globalState = configureStore({
     userSliceReducer,
     picSliceReducer,
     eventReducer,
-    categoryReducer
+    categoryReducer,
+    cityReducer
   },
 });
 export default globalState;
