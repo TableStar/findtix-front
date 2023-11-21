@@ -25,8 +25,8 @@ const LandingPageLogin = () => {
       });
       console.log("check user", response.data.result.token);
       if (response.data.result.token) {
-        dispatch(userLoaded(response.data.result));
         localStorage.setItem("token", response.data.result.token);
+        dispatch(userLoaded(response.data.result));
       }
       navigate("/");
     } catch (error) {
@@ -45,7 +45,7 @@ const LandingPageLogin = () => {
   // }, []);
 
   useEffect(() => {
-    if (userGlobal.user) {
+    if (userGlobal.token) {
       navigate("/");
     }
   }, [userGlobal.user]);
@@ -63,7 +63,12 @@ const LandingPageLogin = () => {
         <aside className="flex items-center justify-center px-4 py-4 sm:px-6 lg:col-span-7 lg:px-12 lg:py-8 xl:col-span-6">
           <div className=" flex flex-col justify-center items-center lg:items-baseline h-full w-full ">
             <div className=" ps-8">
-              <p className="font-bold text-base md:text-2xl cursor-pointer" onClick={() => { navigate("/") }}>
+              <p
+                className="font-bold text-base md:text-2xl cursor-pointer"
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
                 Find<span className="font-black text-[#d2633b]">TIX</span>
               </p>
               <h2 className="text-2xl font-bold leading-7 text-black sm:truncate sm:text-3xl sm:tracking-tight">
@@ -98,10 +103,11 @@ const LandingPageLogin = () => {
                   onChanger={(e) => setInPassword(e.target.value)}
                   names="password"
                   inputType="password"
-                  className={` lg:w-80 ${inPassword.length <= 7 && inPassword.length > 0
+                  className={` lg:w-80 ${
+                    inPassword.length <= 7 && inPassword.length > 0
                       ? `border-2 border-red-500 `
                       : ``
-                    }`}
+                  }`}
                 />
                 {focusPassword && inPassword.length <= 0 ? (
                   <p className="text-red-500 text-xs italic">

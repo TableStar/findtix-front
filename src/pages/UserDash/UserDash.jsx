@@ -91,10 +91,10 @@ const UserDash = () => {
     userGlobal
   );
   useEffect(() => {
-    dispatch(keepLogin())
-    // if (!userGlobal?.token) {
-    //   navigate("/auth/login")
-    // }
+    dispatch(keepLogin());
+    if (!userGlobal?.token) {
+      navigate("/auth/login");
+    }
     dispatch(getPic());
     dispatch(getUserProps());
   }, []);
@@ -111,7 +111,12 @@ const UserDash = () => {
     <div className="flex flex-row">
       <div className="fixed flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 w-full h-screen max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
         <div className="mb-2 p-4">
-          <p className="font-bold text-base md:text-2xl cursor-pointer" onClick={()=> {navigate("/")}}>
+          <p
+            className="font-bold text-base md:text-2xl cursor-pointer"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
             Find<span className="font-black text-[#d2633b]">TIX</span>
           </p>
         </div>
@@ -314,20 +319,24 @@ const UserDash = () => {
                 defaultValue={userPropsGlobal.phoneNumber}
               />
             </div>
-            <div className="mb-6">
-              <InputBoxForm
-                htmlName="creator company"
-                placeholderText="Your Company"
-                focusState={focusCompany}
-                setFocusState={setFocusCompany}
-                labelState={inCompany}
-                onChanger={(e) => setInCompany(e.target.value)}
-                names="last name"
-                inputType="text"
-                className={` lg:w-80`}
-                defaultValue={userPropsGlobal.creatorCompany}
-              />
-            </div>
+            {userGlobal.role === "creator" ? (
+              <div className="mb-6">
+                <InputBoxForm
+                  htmlName="creator company"
+                  placeholderText="Your Company"
+                  focusState={focusCompany}
+                  setFocusState={setFocusCompany}
+                  labelState={inCompany}
+                  onChanger={(e) => setInCompany(e.target.value)}
+                  names="last name"
+                  inputType="text"
+                  className={` lg:w-80`}
+                  defaultValue={userPropsGlobal.creatorCompany}
+                />
+              </div>
+            ) : (
+              <div></div>
+            )}
           </div>
           <div className="flex flex-col gap-y-2 justify-between">
             <button
