@@ -7,8 +7,8 @@ const EventCards = (props) => {
     date[1] = `${date[1]} ${date[2]}`
     date.splice(2, 1)
     date = date.join(", ")
-    let time = props.startDate.split("T")[1].split(".")[0]
-
+    let time = props.startDate.split("T")[1].split(".")[0].split(":")
+    time = time[0] + ":" + time[1]
     return <div className="event-cards min-h-[250px] md:w-[290px] cursor-pointer" onClick={props.onClick}>
         <div className="relative mb-2">
             <img className="w-[100%] h-[200px] object-fill relative" src={props.src} />

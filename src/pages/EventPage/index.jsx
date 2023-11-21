@@ -6,6 +6,7 @@ import { LuClock3 } from "react-icons/lu"
 import { TfiTicket } from "react-icons/tfi"
 import { IoIosInformationCircleOutline } from "react-icons/io"
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai"
+import { FaLocationDot } from "react-icons/fa6";
 import "./style.css"
 import React, { useEffect } from "react"
 import axios from "axios"
@@ -15,7 +16,6 @@ const EventPage = () => {
     const getEvent = async () => {
         const response = await axios.get(`http://localhost:2075/events/upcoming?id=${params.id}`)
         setDatabaseEvent(response.data)
-        console.log(response.data);
     }
     const [databaseEvent, setDatabaseEvent] = React.useState([])
     const [eventTime, setEventTime] = React.useState({})
@@ -23,7 +23,7 @@ const EventPage = () => {
 
     useEffect(() => {
         getEvent()
-    }, [])
+    }, [params])
 
     useEffect(() => {
         if (databaseEvent.length) {
@@ -39,9 +39,6 @@ const EventPage = () => {
 
     const [purchaseCount, setPurchaseCount] = React.useState(1)
     if (databaseEvent.length && eventTime.date) {
-        console.log(databaseEvent[0]);
-        console.log(eventTime);
-
         const printTags = () => {
             return databaseEvent[0].tags.map((value, index) => <span key={index} className="bg-[#f4f2f8] text-gray-500 py-2 px-3 rounded-full">#{value}</span>)
         }
@@ -49,11 +46,11 @@ const EventPage = () => {
         return <LayoutPage>
             <div className="event-details-page">
                 <div className="relative bg-gray-100 md:w-full md:h-[500px]">
-                    <div className="event-background-image-container w-[85%] bg-white rounded-[25px] absolute left-0 right-0 m-auto top-10">
+                    <div className="event-background-image-container w-[90%] bg-white rounded-[25px] absolute left-0 right-0 m-auto top-10">
                         <div className={`event-image-container md:w-[100%] md:h-[500px] md:m-auto`} style={{ backgroundImage: `url(${databaseEvent[index].img})` }} >
                         </div>
                     </div>
-                    <img src={databaseEvent[index].img} className="md:h-[500px] w-full md:w-[65%] md:m-auto md:absolute md:left-0 md:right-0 md:top-10" />
+                    <img src={databaseEvent[index].img} className="md:h-[500px] md:m-auto md:absolute md:left-0 md:right-0 md:top-10 object-cover" />
                 </div>
 
                 <div className="event-contents flex justify-between md:mt-[65px]">
@@ -85,8 +82,8 @@ const EventPage = () => {
                             <div className="event-location">
                                 <h1 className="font-bold text-xl lg:text-[24px]">Location</h1>
                                 <div className="flex flex-row items-center gap-4 mt-2 px-1">
-                                    {databaseEvent[index].city === "Online" ? <BsCameraVideo className="text-[20px] lg:text-[25px]" /> : <BsCalendarCheck className="text-[20px] lg:text-[25px]" />}
-                                    <p className="font-medium text-[15px] lg:text-[17px]">{databaseEvent[index].city === "Online" ? "Online" : `${databaseEvent[0].location}, ${databaseEvent[0].city}`}</p>
+                                    {databaseEvent[index].city.name === "Online" ? <BsCameraVideo className="text-[20px] lg:text-[25px]" /> : <FaLocationDot className="text-[20px] lg:text-[25px]" />}
+                                    <p className="font-medium text-[15px] lg:text-[17px]">{databaseEvent[index].city.name === "Online" ? "Online" : `${databaseEvent[0].location}, ${databaseEvent[0].city.name}`}</p>
                                 </div>
                             </div>
 
@@ -97,11 +94,11 @@ const EventPage = () => {
                                         <div className="text-[#3D64FF] bg-[#f4f2f8] p-2 rounded-md">
                                             <LuClock3 className="text-[20px] lg:text-[25px]" />
                                         </div>
-                                        <p className="font-medium text-[15px] lg:text-[17px]">{eventTime.eventDuration < 60 ? `${eventTime.eventDuration} minutes` :
-                                            eventTime.eventDuration === 60 ? `1 hour` :
-                                                eventTime.eventDuration % 60 === 0 ? `${eventTime.eventDuration / 60} hours` :
-                                                    `${Math.floor(eventTime.eventDuration / 60) === 1 ? "1 hour" : `${Math.floor(eventTime.eventDuration / 60)} hours`} 
-                                and ${eventTime.eventDuration % 60 === 1 ? "1 minute" : `${eventTime.eventDuration % 60} minutes`}`}</p>
+                                        <p className="font-medium text-[15px] lg:text-[17px]">{
+                                            eventTime.eventDuration < 60 ? `${eventTime.eventDuration} minutes` :
+                                                eventTime.eventDuration === 60 ? `1 hour` :
+                                                    eventTime.eventDuration % 60 === 0 ? `${eventTime.eventDuration / 60} hours` :
+                                                        `${Math.floor(eventTime.eventDuration / 60) === 1 ? "1 hour" : `${Math.floor(eventTime.eventDuration / 60)} hours`} and ${eventTime.eventDuration % 60 === 1 ? "1 minute" : `${eventTime.eventDuration % 60} minutes`}`}</p>
                                     </div>
                                     <div className="flex flex-row items-center gap-4 mt-2 px-1">
                                         <div className="text-[#3D64FF] bg-[#f4f2f8] p-2 rounded-md">
