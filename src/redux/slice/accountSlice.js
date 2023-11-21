@@ -4,31 +4,31 @@ import { axiosInstance } from "../../config/axios";
 import { API_URL, setToken } from "../../helper";
 import { useNavigate } from "react-router-dom";
 
+const initialState = {
+  token: localStorage.getItem("token"),
+  isAuthenticated: null,
+  loading: true,
+  username: "",
+  email: "",
+  role: "",
+};
 const accountSlice = createSlice({
   name: "auths",
-  initialState: {
-    token: localStorage.getItem("token"),
-    isAuthenticated: null,
-    loading: true,
-    username: "",
-    email: "",
-  },
+  initialState,
   reducers: {
     userLoaded: (state, action) => {
+      state.token = localStorage.getItem("token");
       state.isAuthenticated = true;
       state.loading = false;
+      state.role = action.payload.role;
       state.username = action.payload.username;
       state.email = action.payload.email;
     },
     logout: (state, action) => {
-      console.log("MASUK LOGOUT");
-      state = {
+      return (state = {
+        ...initialState,
         token: localStorage.removeItem("token"),
-        isAuthenticated: null,
-        loading: true,
-        username: "",
-        email: "",
-      };
+      });
     },
   },
 });
@@ -43,10 +43,11 @@ export const keepLogin = () => {
       const response = await axiosInstance.get(API_URL + "/auths/keeplogin");
       dispatch(userLoaded(response.data.result));
       setToken(response.data.result.token);
-      
     } catch (error) {
-      console.log(error.response.data.message.includes("token is empty"));
-      if (error.response.data.message.includes("token is empty")) {
+      if (
+        error.response.data.message.toLowerCase().includes("invalid") ||
+        error.response.data.message.toLowerCase().includes("empty")
+      ) {
         dispatch(logout());
       }
     }
