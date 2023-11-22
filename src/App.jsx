@@ -11,6 +11,7 @@ import { getEvents } from './redux/slice/eventSlice'
 import { getCategories } from './redux/slice/categorySlice'
 import { keepLogin, logout } from "./redux/slice/accountSlice";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
+import CreateEvent from './forms/CreateEvent';
 
 function App() {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
@@ -39,6 +40,7 @@ function App() {
         <Route path="/auth/register" element={<LandingPageRegister />} />
         <Route path="/userdash" element={<UserDash />} />
         <Route path="/auth/verifyemail" element={<VerifyEmail />} />
+        <Route path="/create" element={<CreateEvent />} />
       </Routes>
     </div>
   );
