@@ -28,7 +28,6 @@ const PasswordChangeForm = () => {
       const response = await axios.post(
         API_URL + "/forgotten/resetpass",
         {
-          oldPassword: inOldPass,
           password: inPassword,
           passwordConfirm: inPasswordConfirm,
         },
