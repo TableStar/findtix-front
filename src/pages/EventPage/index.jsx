@@ -18,6 +18,7 @@ const EventPage = () => {
         setDatabaseEvent(response.data)
     }
     const [databaseEvent, setDatabaseEvent] = React.useState([])
+    console.log("🚀 ~ file: index.jsx:21 ~ EventPage ~ databaseEvent:", databaseEvent)
     const [eventTime, setEventTime] = React.useState({})
     const index = 0
 
