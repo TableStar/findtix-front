@@ -33,3 +33,13 @@ body:target div.search-modal{
 .search-tags:hover {
     background-color: #dfdce5;
 }
+
+.search-event-cards {
+    box-shadow: 2px 2px 4px 0.4px rgb(77, 77, 77, 0.4);
+    transition: 0.3s ease-in-out;
+}
+
+.search-event-cards:hover{
+    box-shadow: 0px 0px 8px 4px rgba(120, 120, 120, 0.4);
+    transform: translateX(5px);
+}
