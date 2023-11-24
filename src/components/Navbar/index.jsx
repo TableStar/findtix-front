@@ -38,12 +38,11 @@ const Navbar = (props) => {
             <SearchModal visible={props.visible} selectedCity={props.selectedCity} onClick={props.onClickClose} />
             <div className="flex flex-row items-center w-[50%] gap-2 md:gap-4">
                 <p className="font-bold text-2xl cursor-pointer" onClick={() => location.pathname === "/" ? "" : navigate("/")}>Find<span className="font-black text-[#d2633b]">TIX</span></p>
-                {!location.pathname.includes("userdash") ? (
-                    <a className="bg-gray-100 min-w-[110px] w-[80%] max-w-[360px] font-normal text-gray-400 p-1 md:p-[10px] indent-1 border border-gray-300 rounded-[20px] cursor-pointer"
-                        style={{ display: location.pathname.includes('/search') ? "none" : "block" }}
-                        onClick={props.onClickOpen} href="#search">
-                        Search Events
-                    </a>) : ""}
+                <a className="bg-gray-100 min-w-[110px] w-[80%] max-w-[360px] font-normal text-gray-400 p-1 md:p-[10px] indent-1 border border-gray-300 rounded-[20px] cursor-pointer"
+                    style={{ display: location.pathname.includes('/search') ? "none" : "block" }}
+                    onClick={props.onClickOpen} href="#search">
+                    Search Events
+                </a>
             </div>
             {isLoggedIn ? <div className="navbar-btn cursor-pointer flex flex-row items-center gap-2 lg:gap-8">
                 <p className="hidden lg:block text-gray-500 hover:text-black font-normal py-4 px-2">Find events</p>
