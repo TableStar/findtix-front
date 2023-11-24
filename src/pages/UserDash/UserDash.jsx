@@ -15,6 +15,7 @@ import Navbar from "../../components/Navbar";
 import Toast from "../../components/Toast/Toast";
 import { Dialog } from "@headlessui/react";
 import ModalForLoading from "../../components/ModalForLoading";
+import PassForm from "../../components/PassForm";
 
 const UserDash = () => {
   const navigate = useNavigate();
@@ -37,8 +38,8 @@ const UserDash = () => {
   const [loader, setLoader] = useState(false);
   const [openToastSuccessUp, setOpenToastSuccessUp] = useState(false);
   const [isOpenLoad, setIsOpenLoad] = useState(false);
+  const [menu, setMenu] = useState(0);
   const dispatch = useDispatch();
-  const testarray = [1, 2, 3, 4, 5];
 
   const profilePhotoSave = async (event) => {
     try {
@@ -136,6 +137,9 @@ const UserDash = () => {
             <button
               type="button"
               tabIndex="0"
+              onClick={() => {
+                setMenu(0);
+              }}
               className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
             >
               <div className="grid place-items-center mr-4">
@@ -153,11 +157,14 @@ const UserDash = () => {
                   ></path>
                 </svg>
               </div>
-              Profile
+              Profile Information
             </button>
-            <div
-              role="button"
+            <button
+              type="button"
               tabIndex="0"
+              onClick={() => {
+                setMenu(1);
+              }}
               className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
             >
               <div className="grid place-items-center mr-4">
@@ -175,11 +182,14 @@ const UserDash = () => {
                   ></path>
                 </svg>
               </div>
-              Settings
-            </div>
-            <div
-              role="button"
+              Change Username
+            </button>
+            <button
+              type="button"
               tabIndex="0"
+              onClick={() => {
+                setMenu(2);
+              }}
               className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
             >
               <div className="grid place-items-center mr-4">
@@ -192,173 +202,199 @@ const UserDash = () => {
                 >
                   <path
                     fillRule="evenodd"
-                    d="M12 2.25a.75.75 0 01.75.75v9a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM6.166 5.106a.75.75 0 010 1.06 8.25 8.25 0 1011.668 0 .75.75 0 111.06-1.06c3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788a.75.75 0 011.06 0z"
+                    d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"
                     clipRule="evenodd"
                   ></path>
                 </svg>
               </div>
-              Log Out
-            </div>
+              Password
+            </button>
           </nav>
         </div>
         <div className=" flex w-full h-screen max-w-[20rem] p-4"></div>
-        <div className=" px-4">
-          <div className="flex flex-row-reverse py-3 w-full mx-auto">
-            <p className="text-sm">
-              FindTix account since {userPropsGlobal.createdAt.split("T")[0]}
-            </p>
-          </div>
-          <div>
+        {menu == 0 ? (
+          <div className=" px-4">
+            <div className="flex flex-row-reverse py-3 w-full mx-auto">
+              <p className="text-sm">
+                FindTix account since {userPropsGlobal.createdAt.split("T")[0]}
+              </p>
+            </div>
+            <div>
+              <div className="flex justify-between">
+                <h1 className="text-xl font-bold">Profile Photo</h1>
+              </div>
+              <div>
+                <div className="w-full h-[1px] my-4 bg-slate-300 mx-auto"></div>
+              </div>
+              <div className=" w-48">
+                <div className=" flex justify-center content-center items-center h-48 w-48 border-2 border-slate-300">
+                  <form>
+                    <label
+                      htmlFor="picUpload"
+                      className=" focus:outline-1"
+                      onSubmit={profilePhotoSave}
+                    >
+                      {profilePicGlobal &&
+                      !profilePicGlobal.includes("null") ? (
+                        <div className="h-44 w-44 cursor-pointer">
+                          <img
+                            src={profilePicGlobal}
+                            className="w-full h-full object-contain"
+                          />
+                          <input
+                            id="picUpload"
+                            name="picUpload"
+                            onChange={(e) => profilePhotoSave(e)}
+                            type="file"
+                            accept="image/*"
+                            className=" opacity-0 -z-10 absolute"
+                          />
+                        </div>
+                      ) : (
+                        <div className=" flex flex-col items-center h-44 w-44 border border-dashed border-slate-300 cursor-pointer">
+                          <BsPersonFill size={"100px"} />
+                          <p>
+                            ADD A PROFILE
+                            <span className=" flex justify-center">IMAGE</span>
+                          </p>
+                          <p className=" text-xs">click to upload photo</p>
+                          <input
+                            id="picUpload"
+                            name="picUpload"
+                            onChange={(e) => profilePhotoSave(e)}
+                            type="file"
+                            accept="image/*"
+                            className=" opacity-0 -z-10 absolute"
+                          />
+                        </div>
+                      )}
+                    </label>
+                  </form>
+                </div>
+                <div className="flex gap-x-3 justify-between my-1">
+                  <p className=" text-xs">Click picture to change</p>
+                  <a
+                    className=" text-xs flex text-blue-600 hover:cursor-pointer hover:underline"
+                    onClick={profilePhotoDelete}
+                  >
+                    <FaTrashCan /> Remove
+                  </a>
+                </div>
+              </div>
+            </div>
+
             <div className="flex justify-between">
-              <h1 className="text-xl font-bold">Profile Photo</h1>
+              <h1 className="text-xl font-bold">Account Information</h1>
             </div>
             <div>
               <div className="w-full h-[1px] my-4 bg-slate-300 mx-auto"></div>
             </div>
-            <div className=" w-48">
-              <div className=" flex justify-center content-center items-center h-48 w-48 border-2 border-slate-300">
-                <form>
-                  <label
-                    htmlFor="picUpload"
-                    className=" focus:outline-1"
-                    onSubmit={profilePhotoSave}
-                  >
-                    {profilePicGlobal && !profilePicGlobal.includes("null") ? (
-                      <div className="h-44 w-44 cursor-pointer">
-                        <img
-                          src={profilePicGlobal}
-                          className="w-full h-full object-contain"
-                        />
-                        <input
-                          id="picUpload"
-                          name="picUpload"
-                          onChange={(e) => profilePhotoSave(e)}
-                          type="file"
-                          accept="image/*"
-                          className=" opacity-0 -z-10 absolute"
-                        />
-                      </div>
-                    ) : (
-                      <div className=" flex flex-col items-center h-44 w-44 border border-dashed border-slate-300 cursor-pointer">
-                        <BsPersonFill size={"100px"} />
-                        <p>
-                          ADD A PROFILE
-                          <span className=" flex justify-center">IMAGE</span>
-                        </p>
-                        <p className=" text-xs">click to upload photo</p>
-                        <input
-                          id="picUpload"
-                          name="picUpload"
-                          onChange={(e) => profilePhotoSave(e)}
-                          type="file"
-                          accept="image/*"
-                          className=" opacity-0 -z-10 absolute"
-                        />
-                      </div>
-                    )}
-                  </label>
-                </form>
-              </div>
-              <div className="flex gap-x-3 justify-between my-1">
-                <p className=" text-xs">Click picture to change</p>
-                <a
-                  className=" text-xs flex text-blue-600 hover:cursor-pointer hover:underline"
-                  onClick={profilePhotoDelete}
-                >
-                  <FaTrashCan /> Remove
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-between">
-            <h1 className="text-xl font-bold">Account Information</h1>
-          </div>
-          <div>
-            <div className="w-full h-[1px] my-4 bg-slate-300 mx-auto"></div>
-          </div>
-          <form
-            className={
-              "bg-white  rounded-md max-h-fit w-10/12 px-8 pt-6 pb-8 mb-4 "
-            }
-          >
-            <div className=" flex gap-x-8">
-              <div className="mb-6">
-                <InputBoxForm
-                  htmlName="first name"
-                  placeholderText="First Name"
-                  focusState={focusFirstName}
-                  setFocusState={setFocusFirstName}
-                  labelState={inFirstName}
-                  onChanger={(e) => setInFirstName(e.target.value)}
-                  names="first name"
-                  inputType="text"
-                  className={` lg:w-80`}
-                  defaultValue={userPropsGlobal?.firstName}
-                />
-              </div>
-              <div className="mb-6">
-                <InputBoxForm
-                  htmlName="last name"
-                  placeholderText="Last Name"
-                  focusState={focusLastName}
-                  setFocusState={setFocusLastName}
-                  labelState={inLastName}
-                  onChanger={(e) => setInLastName(e.target.value)}
-                  names="last name"
-                  inputType="text"
-                  className={` lg:w-80`}
-                  defaultValue={userPropsGlobal?.lastName}
-                />
-              </div>
-            </div>
-            <div className=" flex gap-x-8">
-              <div className="mb-6">
-                <InputBoxForm
-                  htmlName="phone number"
-                  placeholderText="Phone Number"
-                  focusState={focusPhone}
-                  setFocusState={setFocusPhone}
-                  labelState={inPhone}
-                  onChanger={(e) => setInPhone(e.target.value)}
-                  names="phone number"
-                  inputType="tel"
-                  className={` lg:w-80`}
-                  defaultValue={userPropsGlobal?.phoneNumber}
-                />
-              </div>
-              {userGlobal.role === "creator" ? (
+            <form
+              className={
+                "bg-white  rounded-md max-h-fit w-10/12 px-8 pt-6 pb-8 mb-4 "
+              }
+            >
+              <div className=" flex gap-x-8">
                 <div className="mb-6">
                   <InputBoxForm
-                    htmlName="creator company"
-                    placeholderText="Your Company"
-                    focusState={focusCompany}
-                    setFocusState={setFocusCompany}
-                    labelState={inCompany}
-                    onChanger={(e) => setInCompany(e.target.value)}
+                    htmlName="first name"
+                    placeholderText="First Name"
+                    focusState={focusFirstName}
+                    setFocusState={setFocusFirstName}
+                    labelState={inFirstName}
+                    onChanger={(e) => setInFirstName(e.target.value)}
+                    names="first name"
+                    inputType="text"
+                    className={` lg:w-80`}
+                    defaultValue={userPropsGlobal?.firstName}
+                  />
+                </div>
+                <div className="mb-6">
+                  <InputBoxForm
+                    htmlName="last name"
+                    placeholderText="Last Name"
+                    focusState={focusLastName}
+                    setFocusState={setFocusLastName}
+                    labelState={inLastName}
+                    onChanger={(e) => setInLastName(e.target.value)}
                     names="last name"
                     inputType="text"
                     className={` lg:w-80`}
-                    defaultValue={userPropsGlobal.creatorCompany}
+                    defaultValue={userPropsGlobal?.lastName}
                   />
                 </div>
-              ) : (
-                <div></div>
-              )}
+              </div>
+              <div className=" flex gap-x-8">
+                <div className="mb-6">
+                  <InputBoxForm
+                    htmlName="phone number"
+                    placeholderText="Phone Number"
+                    focusState={focusPhone}
+                    setFocusState={setFocusPhone}
+                    labelState={inPhone}
+                    onChanger={(e) => setInPhone(e.target.value)}
+                    names="phone number"
+                    inputType="tel"
+                    className={` lg:w-80`}
+                    defaultValue={userPropsGlobal?.phoneNumber}
+                  />
+                </div>
+                {userGlobal.role === "creator" ? (
+                  <div className="mb-6">
+                    <InputBoxForm
+                      htmlName="creator company"
+                      placeholderText="Your Company"
+                      focusState={focusCompany}
+                      setFocusState={setFocusCompany}
+                      labelState={inCompany}
+                      onChanger={(e) => setInCompany(e.target.value)}
+                      names="last name"
+                      inputType="text"
+                      className={` lg:w-80`}
+                      defaultValue={userPropsGlobal.creatorCompany}
+                    />
+                  </div>
+                ) : (
+                  <div></div>
+                )}
+              </div>
+              <div className="flex flex-col gap-y-2 justify-between">
+                <button
+                  className=" bg-orange-500 hover:bg-orange-600 text-black w-full lg:w-80 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  type="button"
+                  onClick={() => {
+                    onEditSave();
+                  }}
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        ) : (
+          ""
+        )}
+        {menu == 2 ? (
+          <div className=" px-4">
+            <div>
+              <div className="flex justify-between">
+                <h1 className="text-xl font-bold">Your Password</h1>
+              </div>
+              <div>
+                <div className="w-full h-[1px] my-4 bg-slate-300 mx-auto"></div>
+              </div>
+              <div className="flex justify-between">
+                <h6 className="text-base font-bold">Set a new password</h6>
+              </div>
+              <PassForm/>
             </div>
-            <div className="flex flex-col gap-y-2 justify-between">
-              <button
-                className=" bg-orange-500 hover:bg-orange-600 text-black w-full lg:w-80 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button"
-                onClick={() => {
-                  onEditSave();
-                }}
-              >
-                Submit
-              </button>
+            <div>
+              
             </div>
-          </form>
-        </div>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
       <Dialog
         open={isOpenLoad}
