@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,10 +16,17 @@ const PassForm = () => {
   const [focusPassword, setFocusPassword] = useState(false);
   const [focusConfirmPassword, setFocusConfirmPassword] = useState(false);
   const [isOpenLoad, setIsOpenLoad] = useState(false);
+  const ref = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const urlParams = new URLSearchParams(window.location.search);
   const paramsToken = urlParams.get("token");
+  const resetForm = (ev) => {
+    ev.preventDefault();
+    setInOldPass("");
+    setInPassword("");
+    setInPasswordConfirm("");
+  };
   const onClickSubmitPass = async () => {
     try {
       setIsOpenLoad(true);
@@ -32,19 +39,29 @@ const PassForm = () => {
           },
           { headers: { Authorization: `Bearer ${paramsToken}` } }
         );
+        console.log(
+          "🚀 ~ file: index.jsx:35 ~ onClickSubmitPass ~ response:",
+          response
+        );
         setIsOpenLoad(false);
         navigate("/auth/login");
       } else {
-        const response = await axiosInstance.post(API_URL + "/forgotten/resetpass", {
-          oldPassword: inOldPass,
-          password: inPassword,
-          passwordConfirm: inPasswordConfirm,
-        });
+        const response = await axiosInstance.post(
+          API_URL + "/forgotten/resetpass",
+          {
+            oldPassword: inOldPass,
+            password: inPassword,
+            passwordConfirm: inPasswordConfirm,
+          }
+        );
         console.log(
           "🚀 ~ file: PasswordChangeForm.jsx:36 ~ onClickSubmitPass ~ response:",
           response
         );
         setIsOpenLoad(false);
+        setInOldPass("");
+        setInPassword("");
+        setInPasswordConfirm("");
       }
     } catch (error) {
       console.log(error);
