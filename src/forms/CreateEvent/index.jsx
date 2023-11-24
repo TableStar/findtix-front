@@ -2,22 +2,12 @@ import LayoutPage from "../../components/LayoutPage";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import './style.css'
+import { API_URL } from "../../helper";
+// import PriceEvent from "../PriceEvent";
 
 const CreateEvent = () => {
   
-  const [formData, setFormData] = useState({
-    category: "",
-    title: "",
-    seats: "",
-    tags: "",
-    caption: "",
-    city: "",
-    address: "",
-    startDate: "",
-    endDate: "",
-    img: "",
-    description: ""
-  });
+  const [formData, setFormData] = useState({});
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -27,15 +17,38 @@ const CreateEvent = () => {
     });
   };
 
-  const handleSubmit = async () => {
+  // const [categories, setCategories] = useState([]);
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const response = await axios.get("/categories");
+  //       setCategories(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching categories:", error);
+  //     }
+  //   };
+
+  //   fetchCategories();
+  // }, []); 
+
+  const handleSubmit = async (event) => {
+    event.preventDefault(); 
+  
     try {
-      const response = await axios.post("/api/events/create", formData);
+      const formDataObj = new FormData();
+      for (const key in formData) {
+        formDataObj.append(key, formData[key]);
+      }
+      formDataObj.append("fileupload", selectedImage);
+  
+      const response = await axios.post( API_URL + "/events/create", formDataObj);
       console.log("Server response:", response.data);
     } catch (error) {
       console.error("Error submitting event:", error);
     }
   };
-
+  
+  
   //func img
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -80,8 +93,7 @@ const CreateEvent = () => {
             </label>
             <select
               id="category"
-              name="catrgory"
-              value={formData.category}
+              name="category"value={formData.category}
               onChange={handleChange}
               required
               className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -284,7 +296,7 @@ const CreateEvent = () => {
                   type="file"
                   id="img"
                   name="img"
-                  value={formData.img}
+                  value={formData.image}
                   onChange={handleImageChange}
                   className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
@@ -302,27 +314,28 @@ const CreateEvent = () => {
           <div>
       <h3 className="text-2xl font-bold mb-4">Description</h3>
       <textarea
-        id="message"
-        rows="6"
-        value={formData.description}
-        onChange={handleDescriptionChange}
-        className="resize-none block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-        placeholder="Write a description for your event"
-        required
-      ></textarea>
-      <p className="text-sm text-gray-500 mt-2">
-        {wordCount}/{maxWords} words
-      </p>
+  id="message"
+  rows="6"
+  value={description}
+  onChange={handleDescriptionChange}
+  className="resize-none block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+  placeholder="Write a description for your event"
+  required
+></textarea>
+<p className="text-sm text-gray-500 mt-2">
+  {formData?.description?.split(/\s+/).filter(Boolean).length}/{maxWords} words
+</p>
       <div className="text-center">
       <button
         type="submit"
         onClick={handleSubmit}
         className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
       >
-        Submit Event
+        Add Ticket
       </button>
     </div>
     </div>
+    {/* <PriceEvent /> */}
         </form>
       </main>
     </LayoutPage>
