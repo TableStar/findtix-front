@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import "./style.css";
-import { AiOutlineMenu } from "react-icons/ai";
-import { IoIosArrowDown, IoIosArrowUp, IoMdHeartEmpty } from "react-icons/io";
+import React, { useEffect } from "react"
+import "./style.css"
+import { AiOutlineMenu } from "react-icons/ai"
+import { IoIosArrowDown, IoIosArrowUp, IoMdHeartEmpty } from "react-icons/io"
 import { IoTicketOutline, IoClose } from "react-icons/io5";
-import { BsCalendar, BsTicketPerforated } from "react-icons/bs";
-import { BiHelpCircle } from "react-icons/bi";
+import { BsCalendar, BsTicketPerforated } from "react-icons/bs"
+import { BiHelpCircle } from "react-icons/bi"
 import { VscAccount } from "react-icons/vsc";
 
-import { useLocation, useNavigate } from "react-router-dom";
-import SearchModal from "../SearchModal";
+import { useLocation, useNavigate } from "react-router-dom"
+import SearchModal from "../SearchModal"
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/slice/accountSlice"
 import { getPic } from "../../redux/slice/picSlice";

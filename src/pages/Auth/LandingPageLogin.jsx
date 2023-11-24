@@ -5,23 +5,19 @@ import { Link, useNavigate } from "react-router-dom";
 import InputBoxForm from "../../components/InputBoxForm";
 import { API_URL } from "../../helper";
 import { userLoaded } from "../../redux/slice/accountSlice";
-import ModalForResetPass from "../../components/ModalForResetPass";
-import ModalForLoading from "../../components/ModalForLoading";
-import { Dialog } from "@headlessui/react";
 // import { loginAction } from "../redux/action/accountAction";
 
 const LandingPageLogin = () => {
   const [inUsername, setInUsername] = useState("");
   const [inPassword, setInPassword] = useState("");
-  const [isOpenForgot, setIsOpenForgot] = useState(false);
-  const [isOpenLoad, setIsOpenLoad] = useState(false);
+  const [inEmail, setInEmail] = useState("");
   const [focusUsername, setFocusUsername] = useState(false);
   const [focusPassword, setFocusPassword] = useState(false);
 
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const onLogin = async () => {
+  const onLogin = async (username, password) => {
     try {
       const response = await axios.post(API_URL + `/auths/login`, {
         username: inUsername,
@@ -37,6 +33,17 @@ const LandingPageLogin = () => {
       console.log(error);
     }
   };
+  // useEffect(() => {
+  //   if (accountGlobal.username && accountGlobal.password) {
+  //     navigate("/");
+  //   }
+  // }, [accountGlobal]);
+  // useEffect(() => {
+  //   if (localStorage.getItem("dataAccount")) {
+  //     navigate("/");
+  //   }
+  // }, []);
+
   useEffect(() => {
     if (userGlobal.token) {
       navigate("/");
@@ -110,6 +117,7 @@ const LandingPageLogin = () => {
                   <div className=" h-4"></div>
                 )}
               </div>
+
               <div className="flex flex-col gap-y-2 justify-between">
                 <button
                   className=" bg-orange-500 hover:bg-orange-600 text-black w-full lg:w-80 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -123,29 +131,10 @@ const LandingPageLogin = () => {
                 <a
                   className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
                   href="#"
-                  onClick={() => {
-                    setIsOpenForgot(!isOpenForgot);
-                  }}
                 >
                   Forgot Password?
                 </a>
               </div>
-              <Dialog
-                open={isOpenLoad}
-                onClose={() => setIsOpenLoad(false)}
-                className="relative z-40"
-              >
-                <ModalForLoading />
-              </Dialog>
-              <Dialog
-                open={isOpenForgot}
-                onClose={() => setIsOpenForgot(false)}
-                className="relative z-20"
-              >
-                <ModalForResetPass
-                  onClickforX={() => setIsOpenForgot(!isOpenForgot)}
-                />
-              </Dialog>
             </form>
             <div className=" max-w-sm mx-auto text-center mt-12 mb-6">
               <p className=" text-black text-sm">
