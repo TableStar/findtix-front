@@ -1,17 +1,16 @@
-import "./App.css";
+import './App.css'
 import { Route, Routes, useNavigate } from "react-router-dom";
-import LandingPage from "./pages/LandingPage";
-import EventPage from "./pages/EventPage";
+import LandingPage from './pages/LandingPage'
+import EventPage from './pages/EventPage'
 import LandingPageLogin from "./pages/Auth/LandingPageLogin";
 import LandingPageRegister from "./pages/Auth/LandingPageRegister";
 import UserDash from "./pages/UserDash/UserDash";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getEvents } from "./redux/slice/eventSlice";
-import { getCategories } from "./redux/slice/categorySlice";
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getEvents } from './redux/slice/eventSlice'
+import { getCategories } from './redux/slice/categorySlice'
 import { keepLogin, logout } from "./redux/slice/accountSlice";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
-import PasswordChangeForm from "./pages/PassResetPage/PasswordChangeForm";
 import SearchPage from './pages/SearchPage';
 
 function App() {
@@ -23,14 +22,14 @@ function App() {
     dispatch(getCategories());
     if (!userGlobal.token && !localStorage.token) {
       dispatch(logout());
-    } else {
+    } else if (userGlobal.token) {
       console.log("MASUK KEEP LOGIN");
       dispatch(keepLogin());
     }
     // if (!userGlobal.token) {
     //   navigate("/auth/login");
     // }
-  }, []);
+  }, [])
 
   return (
     <div>
@@ -42,7 +41,7 @@ function App() {
         <Route path="/userdash" element={<UserDash />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/auth/verifyemail" element={<VerifyEmail />} />
-        <Route path="/auth/forgotpass" element={<PasswordChangeForm />} />
+
       </Routes>
     </div>
   );
