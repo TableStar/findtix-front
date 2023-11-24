@@ -23,9 +23,8 @@ const PassForm = () => {
   const paramsToken = urlParams.get("token");
   const resetForm = (ev) => {
     ev.preventDefault();
-    setInOldPass("");
-    setInPassword("");
-    setInPasswordConfirm("");
+
+    ev.target.reset();
   };
   const onClickSubmitPass = async () => {
     try {
@@ -144,8 +143,9 @@ const PassForm = () => {
         <button
           className=" bg-orange-500 hover:bg-orange-600 text-black w-full lg:w-80 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           type="button"
-          onClick={() => {
+          onClick={(ev) => {
             onClickSubmitPass();
+            resetForm(ev);
           }}
         >
           Submit
