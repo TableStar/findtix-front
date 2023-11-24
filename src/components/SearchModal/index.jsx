@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCities } from "../../redux/slice/citySlice";
 import { getSearchEvents } from "../../redux/slice/eventSlice";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import Event404 from "../../components/Event404";
+import { getLocation } from "../../helper";
 
 const SearchModal = (props) => {
     const navigate = useNavigate()
@@ -31,37 +32,8 @@ const SearchModal = (props) => {
         dispatch(getSearchEvents(`?city=${selectedCity}`))
     }, [selectedCity])
 
-    const getLocation = async () => {
-        const getCurrentPosition = () => {
-            return new Promise((resolve, reject) => {
-                navigator.geolocation.getCurrentPosition(position => resolve(position), error => reject(error))
-            })
-        }
-        try {
-            const position = await getCurrentPosition()
-            const options = {
-                method: "GET",
-                url: 'https://trueway-geocoding.p.rapidapi.com/ReverseGeocode',
-                params: {
-                    location: `${position.coords.latitude},${position.coords.longitude}`,
-                    language: "en"
-                },
-                headers: {
-                    "X-RapidAPI-Key": "6e2751ea05msh4e2a6982cd7d959p10e6b8jsn72525ae5f311",
-                    "X-RapidAPI-Host": "trueway-geocoding.p.rapidapi.com"
-                }
-            }
-            const response = await axios.request(options)
-            return response.data.results[0].area
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
     useEffect(() => {
-        console.log("MASUK SINI");
         if (props.visible) {
-            console.log("MASUK TRUE USE EFFECT");
             setSearchVisible(true)
             setTimeout(() => {
                 setPosition("0")
@@ -77,18 +49,20 @@ const SearchModal = (props) => {
     const searchTypes = ["Online", "Free", "Today", "This weekend", "This month", "Music", "Health"]
 
     const printTags = () => {
-        return searchTypes.map((value, index) => { return <span key={index} onClick={() => { alert(selectedCity) }} className="search-tags bg-[#f4f2f8] font-normal text-[16px] py-2 px-4 rounded-full cursor-pointer">{value}</span> })
+        return searchTypes.map((value, index) => { return <span key={index} onClick={() => { "" }} className="search-tags bg-[#f4f2f8] font-normal text-[16px] py-2 px-4 rounded-full cursor-pointer">{value}</span> })
     }
     return <div className="search-modal flex flex-col md:flex-row gap-8 w-screen min-h-screen bg-white pt-16 px-6 overflow-scroll"
         style={{ display: searchVisible ? "flex" : "none", top: position }}>
         <a className="search-modal-btn absolute top-1 right-1 text-[22px] p-[10px]" onClick={props.onClick} href="#">
-            <AiOutlineClose /></a>
+            <AiOutlineClose />
+        </a>
+        <p className="font-bold text-2xl cursor-pointer absolute top-3 left-5" onClick={() => navigate("/")}>Find<span className="font-black text-[#d2633b]">TIX</span></p>
         <div className="search-modal-header flex flex-col w-[100%] md:w-[50%]  gap-4">
             <div className="search-input flex flex-row max-w-[500px] gap-4 items-center">
                 <AiOutlineSearch className="text-[32px]" />
                 <input type="text" className="py-2 border-b-[4px] w-[80%] text-[25px]" placeholder="Search for anything"
                     onChange={(e) => { dispatch(getSearchEvents(`?name=${e.target.value}&city=${selectedCity}`)) }} />
-                <AiOutlineArrowRight className="text-[32px]" />
+                <AiOutlineArrowRight className="text-[32px] cursor-pointer" onClick={() => { navigate(`/search`) }} />
             </div>
             <div className="search-input relative">
                 <div className="search-input flex flex-row items-center gap-4">
@@ -131,9 +105,10 @@ const SearchModal = (props) => {
                 {printTags()}
             </div>
         </div>
-        <div>
+        <div className="w-[100%] md:w-[50%]" >
             <h1 className="text-[22px] font-semibold">Upcoming events</h1>
-            <div className="flex flex-col gap-8 mt-8 py-1 pb-4">
+            {eventDatabase.length ? "" : <Event404 className={"w-full mt-4"} />}
+            <div className="flex flex-col gap-4 mt-8 py-1 pb-4">
                 {eventDatabase.map((value, index) => {
                     let date = new Date(value.startDate).toDateString().split(" ")
                     date[1] = `${date[1]} ${date[2]}`
@@ -144,13 +119,13 @@ const SearchModal = (props) => {
                     return <div key={index} onClick={() => {
                         setSearchVisible(false)
                         navigate(`/e/${value.id}`)
-                    }} className="flex flex-row w-[100%] cursor-pointer">
-                        <div className="flex flex-col gap-1 w-[50%]">
+                    }} className="search-event-cards flex flex-row w-[100%] h-[20vh] cursor-pointer">
+                        <div className="flex flex-col justify-center gap-1 w-[50%] px-4 py-2">
                             <h1 className="text-[20px]">{value.name}</h1>
                             <p className="text-[#cb3c09]">{date + ", " + time}</p>
                             <p className="text-gray-500 font-normal">{value.location ? value.location : "Online event"}</p>
                         </div>
-                        <img src={value.img} className="w-[50%] h-[15vh] object-cover" />
+                        <img src={value.img} className="w-[50%] h-[100%] object-cover" />
                     </div>
                 })}
             </div>
