@@ -1,9 +1,12 @@
 import axios from "axios";
 import { API_URL } from "../../helper";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const VerifyEmail = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const paramsToken = urlParams.get("token");
+  const navigate = useNavigate();
   console.log(paramsToken);
   console.log(API_URL);
   const emailVerification = async () => {
@@ -15,12 +18,17 @@ const VerifyEmail = () => {
       );
       console.log(response);
       if (response.data.message.includes("verified")) {
-        alert("your account has been verified")
+        alert("your account has been verified");
       }
     } catch (error) {
       console.log(error);
     }
   };
+  useEffect(() => {
+    if (!paramsToken?.length > 0) {
+      navigate("/")
+    }
+  });
   return (
     <div className=" flex flex-col justify-center items-center text-center h-80">
       <h1 className=" text-4xl">Verify Email</h1>

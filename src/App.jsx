@@ -11,6 +11,7 @@ import { getEvents } from './redux/slice/eventSlice'
 import { getCategories } from './redux/slice/categorySlice'
 import { keepLogin, logout } from "./redux/slice/accountSlice";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
+import PasswordChangeForm from "./pages/PassResetPage/PasswordChangeForm";
 import SearchPage from './pages/SearchPage';
 
 function App() {
@@ -41,7 +42,7 @@ function App() {
         <Route path="/userdash" element={<UserDash />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/auth/verifyemail" element={<VerifyEmail />} />
-
+        <Route path="/auth/forgotpass" element={<PasswordChangeForm />} />
       </Routes>
     </div>
   );
