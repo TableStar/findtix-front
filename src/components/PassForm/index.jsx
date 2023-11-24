@@ -23,6 +23,7 @@ const PassForm = () => {
   const paramsToken = urlParams.get("token");
   const resetForm = (ev) => {
     ev.preventDefault();
+
     ev.target.reset();
   };
   const onClickSubmitPass = async () => {
