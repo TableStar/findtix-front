@@ -42,6 +42,7 @@ export const keepLogin = () => {
     try {
       const response = await axiosInstance.get(API_URL + "/auths/keeplogin");
       dispatch(userLoaded(response.data.result));
+      console.log(response.data.result);
       setToken(response.data.result.token);
     } catch (error) {
       if (

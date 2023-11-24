@@ -9,7 +9,7 @@ const EventCards = (props) => {
     date = date.join(", ")
     let time = props.startDate.split("T")[1].split(".")[0].split(":")
     time = time[0] + ":" + time[1]
-    return <div className="event-cards min-h-[250px] md:w-[290px] cursor-pointer" onClick={props.onClick}>
+    return <div className="event-cards min-h-[250px] md:w-[290px] max-w-[400px] cursor-pointer" onClick={props.onClick}>
         <div className="relative mb-2">
             <img className="w-[100%] h-[200px] object-fill relative" src={props.src} />
             <button className="absolute flex justify-center items-center h-[40px] w-[40px] md:h-[50px] md:w-[50px] border rounded-full bg-white top-[185px] md:top-[176px] right-[55px] md:right-[70px]"><BiHeart className="text-[20px] md:text-[24px]" /></button>

@@ -29,8 +29,8 @@ const EventPage = () => {
         if (databaseEvent.length) {
             setEventTime({
                 date: new Date(databaseEvent[0].startDate).toLocaleDateString("en-us", { weekday: "long", month: "long", year: "numeric", day: "numeric" }),
-                startTime: new Date(databaseEvent[0].startDate).toLocaleTimeString("id").split("."),
-                endTime: new Date(databaseEvent[0].endDate).toLocaleTimeString("id").split("."),
+                startTime: databaseEvent[0].startDate.split("T")[1].split(".")[0].split(":"),
+                endTime: databaseEvent[0].endDate.split("T")[1].split(".")[0].split(":"),
                 eventDuration: (new Date(databaseEvent[0].endDate) - new Date(databaseEvent[0].startDate)) / 1000 / 60
             })
         }
@@ -121,22 +121,32 @@ const EventPage = () => {
                     </div>
 
                     <div className="checkout-button flex flex-col justify-center w-full md:w-[400px] md:h-fit fixed md:sticky md:top-[80px] md:rounded-lg md:mt-[24px] md:mr-12 bottom-0 bg-white p-6 gap-4">
-                        <div className="border-[2px] flex flex-col p-4 border-blue-700 rounded-md gap-6">
-                            <div className="flex justify-between gap-8">
+                        {databaseEvent[index].ticketTypes.length > 1 ? <div className="border-[2px] flex flex-col p-4 border-blue-700 rounded-md gap-6">
+                            <span className="font-semibold">Tickets start from:</span>
+                            <div className="flex gap-4">
                                 <span className="font-medium">{databaseEvent[index].ticketTypes[0].name}</span>
-                                <div className="flex items-center gap-2">
-                                    <button className={`p-1 rounded-md ${purchaseCount === 1 ? "bg-[#f4f2f8] text-gray-400" : "bg-blue-700 text-white"}`}
-                                        onClick={() => setPurchaseCount(purchaseCount - 1)} disabled={purchaseCount === 1 ? true : false} ><AiOutlineMinus /></button>
-                                    <span>{purchaseCount}</span>
-                                    <button className="bg-blue-700 text-white p-1 rounded-md"
-                                        onClick={() => setPurchaseCount(purchaseCount + 1)}><AiOutlinePlus /></button>
-                                </div>
+                                <span className="flex items-center gap-4">
+                                    {`Rp. ${databaseEvent[index].ticketTypes[0].price.toLocaleString("id")}`}
+                                    <IoIosInformationCircleOutline className="text-[21px] text-blue-700 cursor-pointer" />
+                                </span>
                             </div>
-                            <span className="flex items-center gap-4">
-                                {!databaseEvent[index].ticketTypes[0].price ? "Free" : `Rp. ${databaseEvent[index].ticketTypes[0].price.toLocaleString("id")}`}
-                                <IoIosInformationCircleOutline className="text-[21px] text-blue-700" />
-                            </span>
                         </div>
+                            : <div className="border-[2px] flex flex-col p-4 border-blue-700 rounded-md gap-6">
+                                <div className="flex justify-between gap-8">
+                                    <span className="font-medium">{databaseEvent[index].ticketTypes[0].name}</span>
+                                    <div className="flex items-center gap-2">
+                                        <button className={`p-1 rounded-md ${purchaseCount === 1 ? "bg-[#f4f2f8] text-gray-400" : "bg-blue-700 text-white"}`}
+                                            onClick={() => setPurchaseCount(purchaseCount - 1)} disabled={purchaseCount === 1 ? true : false} ><AiOutlineMinus /></button>
+                                        <span>{purchaseCount}</span>
+                                        <button className="bg-blue-700 text-white p-1 rounded-md"
+                                            onClick={() => setPurchaseCount(purchaseCount + 1)}><AiOutlinePlus /></button>
+                                    </div>
+                                </div>
+                                <span className="flex items-center gap-4">
+                                    {!databaseEvent[index].ticketTypes[0].price ? "Free" : `Rp. ${databaseEvent[index].ticketTypes[0].price.toLocaleString("id")}`}
+                                    <IoIosInformationCircleOutline className="text-[21px] text-blue-700 cursor-pointer" />
+                                </span>
+                            </div>}
                         <button className="bg-[#d2633b] text-white text-md rounded-[4px] py-2">
                             Reserve a spot
                         </button>

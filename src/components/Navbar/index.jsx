@@ -11,28 +11,35 @@ import { useLocation, useNavigate } from "react-router-dom"
 import SearchModal from "../SearchModal"
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/slice/accountSlice"
+import { getPic } from "../../redux/slice/picSlice";
 
 const Navbar = (props) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const location = useLocation()
     const [helpVisible, setHelpVisible] = React.useState(false)
     const [smMenu, setSmMenu] = React.useState(false)
     const [isLoggedIn, setIsLoggedIn] = React.useState(false)
-    const userGlobal = useSelector((state) => state.accountSliceReducer);
+    const userGlobal = useSelector((state) => { return state.accountSliceReducer });
+    const profilePic = useSelector((state) => { return state.picSliceReducer.profilepic });
+
     useEffect(() => {
-        // if (userGlobal.username) {
-        //     setIsLoggedIn(true)
-        // } else {
-        //     setIsLoggedIn(false)
-        // }
+        if (userGlobal.username) {
+            dispatch(getPic());
+            setIsLoggedIn(true)
+        } else {
+            setIsLoggedIn(false)
+        }
     }, [userGlobal.username])
+
     return (
         <section className="navbar flex flex-row justify-between items-center bg-white
         w-screen h-[50px] md:h-[70px] border-b-[1px] gap-4 text-sm md:text-base px-2 md:px-8 font-medium sticky top-0 z-10" >
             <SearchModal visible={props.visible} selectedCity={props.selectedCity} onClick={props.onClickClose} />
             <div className="flex flex-row items-center w-[50%] gap-2 md:gap-4">
-                <p className="font-bold text-base md:text-2xl cursor-pointer" onClick={() => navigate("/")}>Find<span className="font-black text-[#d2633b]">TIX</span></p>
-                <a className="bg-gray-100 w-[80%] max-w-[360px] font-normal text-gray-400 p-1 md:p-[10px] indent-1 border border-gray-300 rounded-[20px] cursor-pointer"
+                <p className="font-bold text-2xl cursor-pointer" onClick={() => location.pathname === "/" ? "" : navigate("/")}>Find<span className="font-black text-[#d2633b]">TIX</span></p>
+                <a className="bg-gray-100 min-w-[110px] w-[80%] max-w-[360px] font-normal text-gray-400 p-1 md:p-[10px] indent-1 border border-gray-300 rounded-[20px] cursor-pointer"
+                    style={{ display: location.pathname.includes('/search') ? "none" : "block" }}
                     onClick={props.onClickOpen} href="#search">
                     Search Events
                 </a>
@@ -47,13 +54,13 @@ const Navbar = (props) => {
                     <IoTicketOutline className="text-2xl text-black" />
                     <p className="text-sm font-normal">Tickets</p>
                 </div>
-                <div className="p-3 relative text-gray-500 hover:text-black" onClick={() => { setSmMenu(!smMenu) }}>
-                    <div className="flex flex-row items-center gap-4 ">
-                        <VscAccount className="text-[28px] md:text-[32px] text-black" />
+                <div className="py-2 px-3 relative text-gray-500 hover:text-black" onClick={() => { setSmMenu(!smMenu) }}>
+                    <div className="flex flex-row items-center gap-4">
+                        {profilePic && !profilePic.includes("null") ? <img src={profilePic} className="h-[36px] w-[36px] rounded-full object-cover" /> : <VscAccount className="text-[28px] md:text-[32px] text-black" />}
                         <p className="font-normal">{userGlobal.username}</p>
                         {smMenu ? <IoIosArrowUp /> : <IoIosArrowDown />}
                     </div>
-                    <div className="dropdown-content absolute bg-white w-[250px] text-base font-normal mt-[10px] right-0" style={{ display: smMenu ? "block" : "none" }}>
+                    <div className="dropdown-content absolute bg-white w-[250px] text-base font-normal mt-[5px] right-0" style={{ display: smMenu ? "block" : "none" }}>
                         <div className="lg:hidden">Create Events</div>
                         <div className="lg:hidden">Find Events</div>
                         <div className="md:hidden">My tickets</div>
@@ -64,7 +71,6 @@ const Navbar = (props) => {
                         <div onClick={() => {
                             dispatch(logout())
                             setIsLoggedIn(false)
-                            navigate("/")
                         }}>Log out</div>
                     </div>
                 </div>
