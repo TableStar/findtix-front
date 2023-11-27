@@ -5,50 +5,46 @@ import { Link, useNavigate } from "react-router-dom";
 import InputBoxForm from "../../components/InputBoxForm";
 import { API_URL } from "../../helper";
 import { userLoaded } from "../../redux/slice/accountSlice";
+import ModalForResetPass from "../../components/ModalForResetPass";
+import ModalForLoading from "../../components/ModalForLoading";
+import { Dialog } from "@headlessui/react";
 // import { loginAction } from "../redux/action/accountAction";
 
 const LandingPageLogin = () => {
   const [inUsername, setInUsername] = useState("");
   const [inPassword, setInPassword] = useState("");
-  const [inEmail, setInEmail] = useState("");
+  const [isOpenForgot, setIsOpenForgot] = useState(false);
+  const [isOpenLoad, setIsOpenLoad] = useState(false);
   const [focusUsername, setFocusUsername] = useState(false);
   const [focusPassword, setFocusPassword] = useState(false);
 
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const onLogin = async (username, password) => {
+  const onLogin = async () => {
     try {
+      setIsOpenLoad(true)
       const response = await axios.post(API_URL + `/auths/login`, {
         username: inUsername,
         password: inPassword,
       });
       console.log("check user", response.data.result.token);
       if (response.data.result.token) {
-        dispatch(userLoaded(response.data.result));
         localStorage.setItem("token", response.data.result.token);
+        dispatch(userLoaded(response.data.result));
       }
+      setIsOpenLoad(false)
       navigate("/");
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
+      setIsOpenLoad(false)
     }
   };
-  // useEffect(() => {
-  //   if (accountGlobal.username && accountGlobal.password) {
-  //     navigate("/");
-  //   }
-  // }, [accountGlobal]);
-  // useEffect(() => {
-  //   if (localStorage.getItem("dataAccount")) {
-  //     navigate("/");
-  //   }
-  // }, []);
-
   useEffect(() => {
-    if (userGlobal.user) {
+    if (userGlobal.token) {
       navigate("/");
     }
-  }, [userGlobal.user]);
+  }, [userGlobal?.user]);
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -63,7 +59,12 @@ const LandingPageLogin = () => {
         <aside className="flex items-center justify-center px-4 py-4 sm:px-6 lg:col-span-7 lg:px-12 lg:py-8 xl:col-span-6">
           <div className=" flex flex-col justify-center items-center lg:items-baseline h-full w-full ">
             <div className=" ps-8">
-              <p className="font-bold text-base md:text-2xl cursor-pointer" onClick={() => { navigate("/") }}>
+              <p
+                className="font-bold text-base md:text-2xl cursor-pointer"
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
                 Find<span className="font-black text-[#d2633b]">TIX</span>
               </p>
               <h2 className="text-2xl font-bold leading-7 text-black sm:truncate sm:text-3xl sm:tracking-tight">
@@ -98,10 +99,11 @@ const LandingPageLogin = () => {
                   onChanger={(e) => setInPassword(e.target.value)}
                   names="password"
                   inputType="password"
-                  className={` lg:w-80 ${inPassword.length <= 7 && inPassword.length > 0
+                  className={` lg:w-80 ${
+                    inPassword.length <= 7 && inPassword.length > 0
                       ? `border-2 border-red-500 `
                       : ``
-                    }`}
+                  }`}
                 />
                 {focusPassword && inPassword.length <= 0 ? (
                   <p className="text-red-500 text-xs italic">
@@ -111,7 +113,6 @@ const LandingPageLogin = () => {
                   <div className=" h-4"></div>
                 )}
               </div>
-
               <div className="flex flex-col gap-y-2 justify-between">
                 <button
                   className=" bg-orange-500 hover:bg-orange-600 text-black w-full lg:w-80 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -125,10 +126,29 @@ const LandingPageLogin = () => {
                 <a
                   className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
                   href="#"
+                  onClick={() => {
+                    setIsOpenForgot(!isOpenForgot);
+                  }}
                 >
                   Forgot Password?
                 </a>
               </div>
+              <Dialog
+                open={isOpenLoad}
+                onClose={() => setIsOpenLoad(false)}
+                className="relative z-40"
+              >
+                <ModalForLoading />
+              </Dialog>
+              <Dialog
+                open={isOpenForgot}
+                onClose={() => setIsOpenForgot(false)}
+                className="relative z-20"
+              >
+                <ModalForResetPass
+                  onClickforX={() => setIsOpenForgot(!isOpenForgot)}
+                />
+              </Dialog>
             </form>
             <div className=" max-w-sm mx-auto text-center mt-12 mb-6">
               <p className=" text-black text-sm">

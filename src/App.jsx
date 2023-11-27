@@ -12,6 +12,10 @@ import { getCategories } from './redux/slice/categorySlice'
 import { keepLogin, logout } from "./redux/slice/accountSlice";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 import CreateEvent from './forms/CreateEvent';
+import PasswordChangeForm from "./pages/PassResetPage/PasswordChangeForm";
+import SearchPage from './pages/SearchPage';
+import Page404 from './pages/Page404';
+import PromotorEventPage from './pages/PromotorEventsPage';
 
 function App() {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
@@ -39,8 +43,12 @@ function App() {
         <Route path="/auth/login" element={<LandingPageLogin />} />
         <Route path="/auth/register" element={<LandingPageRegister />} />
         <Route path="/userdash" element={<UserDash />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/auth/verifyemail" element={<VerifyEmail />} />
         <Route path="/create" element={<CreateEvent />} />
+        <Route path="/auth/forgotpass" element={<PasswordChangeForm />} />
+        <Route path="/promotor-events/:id" element={<PromotorEventPage />} />
+        <Route path="*" element={<Page404 />} />
       </Routes>
     </div>
   );
