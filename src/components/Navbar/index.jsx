@@ -30,8 +30,14 @@ const Navbar = (props) => {
         } else {
             setIsLoggedIn(false)
         }
-    }, [userGlobal?.username])
+    }, [userGlobal.username])
+    console.log(userGlobal);
+    // KALAU SUDAH LOGIN, NAVBAR KASIH PROFILE DAN NANTI NAVIGATE(/userdash)
 
+    const handleClickCreateEvent = () => {
+        navigate('/create')
+    }
+    
     return (
         <navbar className="navbar flex flex-row justify-between items-center bg-white
         w-screen h-[50px] md:h-[70px] border-b-[1px] gap-4 text-sm md:text-base px-2 md:px-8 font-medium sticky top-0 z-20" >
@@ -83,7 +89,7 @@ const Navbar = (props) => {
                     {location.pathname.includes("/search") ? "" : <button className="hidden md:inline-block p-4" onClick={() => { navigate("/search?page=1") }}>
                         Find Events
                     </button>}
-                    <button className="hidden md:inline-block p-4">Create Events</button>
+                    <button className="hidden md:inline-block p-4" onClick={handleClickCreateEvent} >Create Events</button>
                     <div className="hidden md:inline-block relative cursor-pointer p-0" style={{ backgroundColor: helpVisible ? "#f4f2f8" : "" }}>
                         <button className="flex flex-row items-center gap-1 py-4 px-[20px]" onClick={() => { setHelpVisible(!helpVisible) }}>
                             Help Center {helpVisible ? <IoIosArrowUp /> : <IoIosArrowDown />}</button>
