@@ -1,12 +1,15 @@
 import LayoutPage from "../../components/LayoutPage";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import './style.css'
+// import './style.css'
 import { API_URL } from "../../helper";
-// import PriceEvent from "../PriceEvent";
+import PriceEvent from "../PriceEvent";
+import Modal from "../Modal";
+import { useSelector } from "react-redux";
+
 
 const CreateEvent = () => {
-  
+  const [isOnline, setIsOnline] = useState(true);
   const [formData, setFormData] = useState({});
 
   const handleChange = (event) => {
@@ -41,7 +44,7 @@ const CreateEvent = () => {
       }
       formDataObj.append("fileupload", selectedImage);
   
-      const response = await axios.post( API_URL + "/events/create", formDataObj);
+      const response = await axios.post( API_URL + "/events/create", formData, formDataObj);
       console.log("Server response:", response.data);
     } catch (error) {
       console.error("Error submitting event:", error);
@@ -65,11 +68,10 @@ const CreateEvent = () => {
   //func limit word
   const [description, setDescription] = useState("");
   const [wordCount, setWordCount] = useState(0);
-  const maxWords = 300;
+  const maxWords = 1000;
 
   const handleDescriptionChange = (event) => {
     const inputText = event.target.value;
-    const words = inputText.split(/\s+/);
     const currentWordCount = words.length - 1;
     setWordCount(currentWordCount);
 
@@ -77,6 +79,9 @@ const CreateEvent = () => {
       setDescription(inputText);
     }
   };
+    const categoryDatabase = useSelector((state) => { return state.categoryReducer.categories })
+    console.log(categoryDatabase);
+  
   return (
     <LayoutPage>
       <main className="min-h-screen py-10 px-2 md:px-8">
@@ -92,21 +97,27 @@ const CreateEvent = () => {
               Select Category
             </label>
             <select
-              id="category"
-              name="category"value={formData.category}
-              onChange={handleChange}
-              required
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            >
-              <option selected>Choose a Category</option>
-              <option value="Sport">Sport</option>
-              <option value="Education">Education</option>
-              <option value="Art">Art</option>
-              <option value="Concert">Concert</option>
-              <option value="Health">Health</option>
-              <option value="Food">Food</option>
-              <option value="Other">Other</option>
-            </select>
+            id="categoryId"
+  name="categoryId"
+  value={formData.categoryId}
+  onChange={() => {
+    handleChange
+    alert("testing")
+  }}
+
+  required
+  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#d2633b] focus:border-[#d2633b] block w-full p-2.5"
+>
+  <option value="" disabled selected>
+    Choose a Category
+  </option>
+  {categoryDatabase.map((category) => (
+    <option key={category.id} value={category.id}>
+      {category.name}
+    </option>
+  ))}
+</select>
+
           </div>
           <div>
             <h3 className="text-2xl font-bold mb-4">Basic info</h3>
@@ -114,71 +125,55 @@ const CreateEvent = () => {
               <div className="relative z-0">
                 <input
                   type="text"
-                  id="title"
-                  name="title"
-                  value={formData.title}
+                  id="name"
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
-                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#d2633b] focus:outline-none focus:ring-0 focus:border-[#d2633b] peer"
                   placeholder=" "
                   required
                 />
                 <label
-                  htmlFor="title"
-                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+                  htmlFor="name"
+                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-[#d2633b] peer-focus:dark:text-[#d2633b] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
                 >
                   Event title
                 </label>
               </div>
               <div className="relative z-0">
-                <input
+              <input
                   type="text"
-                  id="seats"
-                  name="seats"
-                  value={formData.seats}
+                  id="status"
+                  name="status"
+                  value={formData.status}
                   onChange={handleChange}
-                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#d2633b]  focus:outline-none focus:ring-0 focus:border-[#d2633b]  peer"
                   placeholder=" "
                   required
                 />
                 <label
-                  htmlFor="seats"
-                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+                  htmlFor="status"
+                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-[#d2633b] peer-focus:dark:text-[#d2633b] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
                 >
-                  Seats
+                  Status
                 </label>
               </div>
               <div className="relative z-0">
-                <input
-                  type="text"
-                  id="tags"
-                  name="tags"
-                  value={formData.tags}
-                  onChange={handleChange}
-                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                  placeholder=" "
-                  required
-                />
-                <label
-                  htmlFor="tags"
-                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
-                >
-                  Tags
-                </label>
               </div>
-              <div className="relative z-0">
+              <div className="relative z-0 col-span-2">
                 <input
                   type="text"
                   id="caption"
                   name="caption"
                   value={formData.caption}
                   onChange={handleChange}
-                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#d2633b]  focus:outline-none focus:ring-0 focus:border-[#d2633b]  peer"
                   placeholder=" "
                   required
                 />
                 <label
                   htmlFor="caption"
-                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-[#d2633b] peer-focus:dark:text-[#d2633b] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
                 >
                   Caption
                 </label>
@@ -186,15 +181,28 @@ const CreateEvent = () => {
             </div>
           </div>
           <div>
+      
+  <label className="label cursor-pointer">
+    <span>Online</span> 
+    <input
+      type="checkbox"
+      className="toggle"
+      checked={isOnline}
+      onChange={() => setIsOnline(!isOnline)}
+    />
+    <span>Offline</span>
+  </label>
+
+
             <h3 className="text-2xl font-bold mb-4">Location</h3>
             <div className="grid gap-5 md:grid-cols-2">
               <div className="relative z-0">
                 <select
                   id="city"
                   name="city"
-                  value={formData.city}
+                  value={formData.cityId}
                   onChange={handleChange}
-                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#d2633b] focus:outline-none focus:ring-0 focus:border-[#d2633b] peer"
                   required
                 >
                   <option value="category" disabled defaultValue>
@@ -208,30 +216,33 @@ const CreateEvent = () => {
                 </select>
                 <label
                   htmlFor="city"
-                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-[#d2633b] peer-focus:dark:text-[#d2633b] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
                 >
                   Select City
                 </label>
               </div>
 
-              <div className="relative z-0">
-                <input
-                  type="text"
-                  id="address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                  placeholder=" "
-                  required
-                />
-                <label
-                  htmlFor="address"
-                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
-                >
-                  Address
-                </label>
-              </div>
+              {!isOnline && (
+  <div className="relative z-0">
+    <input
+      type="text"
+      id="location"
+      name="location"
+      value={formData.location}
+      onChange={handleChange}
+      className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#d2633b] focus:outline-none focus:ring-0 focus:border-[#d2633b] peer"
+      placeholder=" "
+      required
+    />
+    <label
+      htmlFor="location"
+      className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-[#d2633b] peer-focus:dark:text-[#d2633b] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+    >
+      Location
+    </label>
+  </div>
+)}
+
             </div>
           </div>
           <div>
@@ -244,17 +255,17 @@ const CreateEvent = () => {
                   name="startDate"
                   value={formData.startDate}
                   onChange={handleChange}
-                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#d2633b]  focus:outline-none focus:ring-0 focus:border-[#d2633b]  peer"
                   required
                 />
                 <input
                   type="time"
-                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#d2633b]  focus:outline-none focus:ring-0 focus:border-[#d2633b]  peer"
                   required
                 />
                 <label
                   htmlFor="startDate"
-                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-[#d2633b]  peer-focus:dark:text-[#d2633b]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
                 >
                   Event Start
                 </label>
@@ -266,17 +277,17 @@ const CreateEvent = () => {
                   name="endDate"
                   value={formData.endDate}
                   onChange={handleChange}
-                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#d2633b]  focus:outline-none focus:ring-0 focus:border-[#d2633b]  peer"
                   required
                 />
                 <input
                   type="time"
-                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#d2633b]  focus:outline-none focus:ring-0 focus:border-[#d2633b]  peer"
                   required
                 />
                 <label
                   htmlFor="endDate"
-                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
+                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-[#d2633b]  peer-focus:dark:text-[#d2633b]  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
                 >
                   Event End
                 </label>
@@ -285,31 +296,36 @@ const CreateEvent = () => {
           </div>
           <div>
             <h3 className="text-2xl font-bold mb-4">Main Event Image</h3>
-            <div className="grid gap-5 md:grid-cols-2">
-              <img
-                className="h-auto max-w-md md:max-w-full rounded-lg"
-                src={imagePreview || "https://flowbite.com/docs/images/examples/image-3@2x.jpg"}
-                alt="image description"
-              />
-              <div className="relative z-0">
-                <input
-                  type="file"
-                  id="img"
-                  name="img"
-                  value={formData.image}
-                  onChange={handleImageChange}
-                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                  placeholder=" "
-                  required
-                />
-                <label
-                  htmlFor="img"
-                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
-                >
-                  Upload Image
-                </label>
-              </div>
-            </div>
+            <div className="grid grid-cols-1 space-y-2">
+  <label className="text-sm font-bold text-gray-500 tracking-wide">Attach Document</label>
+  <div className="flex items-center justify-center w-full">
+    <label className="flex flex-col rounded-lg border-4 border-dashed w-full h-60 p-10 group text-center">
+      <div className="h-full w-full text-center flex flex-col  justify-center items-center">
+        {imagePreview ? (
+          <img className="h-36 object-center" src={imagePreview} alt="Preview" />
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 text-blue-400 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          </svg>
+        )}
+        <div className="flex flex-auto max-h-48 w-2/5 mx-auto -mt-10">
+          <input
+            type="file"
+            onChange={handleImageChange}
+            className="hidden"
+          />
+        </div>
+        <p className="pointer-none text-gray-500">
+          <span className="text-sm">Drag and drop</span> files here <br /> or <a href="" id="" className="text-blue-600 hover:underline">select a file</a> from your computer
+        </p>
+      </div>
+    </label>
+  </div>
+</div>
+<p className="text-sm text-gray-300">
+  <span>File type: doc, pdf, types of images</span>
+</p>
+
           </div>
           <div>
       <h3 className="text-2xl font-bold mb-4">Description</h3>
@@ -326,16 +342,14 @@ const CreateEvent = () => {
   {formData?.description?.split(/\s+/).filter(Boolean).length}/{maxWords} words
 </p>
       <div className="text-center">
-      <button
-        type="submit"
-        onClick={handleSubmit}
-        className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
-      >
-        Add Ticket
-      </button>
+      <button 
+      type="submit"
+      onClick={handleSubmit}
+      className="btn btn-outline">Add Ticket</button>
     </div>
     </div>
-    {/* <PriceEvent /> */}
+    <Modal />
+    <PriceEvent />
         </form>
       </main>
     </LayoutPage>
