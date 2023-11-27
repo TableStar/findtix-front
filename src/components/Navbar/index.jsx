@@ -45,7 +45,10 @@ const Navbar = (props) => {
                 </a> : ""}
             </div>
             {isLoggedIn ? <div className="navbar-btn cursor-pointer flex flex-row items-center gap-2 lg:gap-8">
-                <p className="hidden lg:block text-gray-500 hover:text-black font-normal py-4 px-2">Find events</p>
+                <p className="hidden lg:block text-gray-500 hover:text-black font-normal py-4 px-2"
+                    onClick={() => { navigate("/search?page=1") }}>
+                    Find events
+                </p>
                 <div className="hidden md:flex flex-col items-center w-[60px] py-2 text-gray-500 hover:text-black">
                     <IoMdHeartEmpty className="text-2xl text-black" />
                     <p className="text-sm font-normal ">Likes</p>
@@ -77,7 +80,9 @@ const Navbar = (props) => {
             </div> :
                 // KALO BELUM LOGIN
                 <div className="navbar-btn flex flex-row justify-between items-center w-[50%]">
-                    <button className="hidden md:inline-block p-4">Find Events</button>
+                    {location.pathname.includes("/search") ? "" : <button className="hidden md:inline-block p-4" onClick={() => { navigate("/search?page=1") }}>
+                        Find Events
+                    </button>}
                     <button className="hidden md:inline-block p-4">Create Events</button>
                     <div className="hidden md:inline-block relative cursor-pointer p-0" style={{ backgroundColor: helpVisible ? "#f4f2f8" : "" }}>
                         <button className="flex flex-row items-center gap-1 py-4 px-[20px]" onClick={() => { setHelpVisible(!helpVisible) }}>
@@ -95,7 +100,8 @@ const Navbar = (props) => {
                             {smMenu ? <IoClose fontSize={"20px"} /> : <AiOutlineMenu fontSize={"20px"} />}
                         </button>
                         <div className="dropdown-content absolute bg-white w-[250px] right-[-7px] top-[50px] font-normal" style={{ display: smMenu ? "block" : "none" }}>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3"
+                                onClick={() => { navigate("/search?page=1") }}>
                                 <BsTicketPerforated fontSize={"18px"} />
                                 Find Events
                             </div>

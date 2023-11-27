@@ -9,16 +9,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { getEvents } from "../../redux/slice/eventSlice";
 import Event404 from "../../components/Event404";
 import { IoIosArrowDown } from "react-icons/io";
+import { IoPeople } from "react-icons/io5";
 import { MdMyLocation, MdOutlineLiveTv } from "react-icons/md";
 import { getCities } from "../../redux/slice/citySlice";
-import { filterDate, getLocation } from "../../helper";
+import { getLocation } from "../../helper";
+import PromotorCard from "../../components/PromotorCard";
 
 const LandingPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
 
-    const tabsType = ["All", "Online", "Free", "Today", "Tomorrow", "This week", "This month", "Music", "Health"]
+    const tabsType = ["All", "Online", "Free", "Today", "Tomorrow", "This-week", "This-month", "Music", "Health"]
     const eventDatabase = useSelector((state) => { return state.eventReducer.events })
     console.log("🚀 ~ file: index.jsx:23 ~ LandingPage ~ eventDatabase:", eventDatabase)
     const categoryDatabase = useSelector((state) => { return state.categoryReducer.categories })
@@ -29,7 +31,7 @@ const LandingPage = () => {
     const [selectedCity, setSelectedCity] = React.useState("Surabaya")
     const [showCities, setShowCities] = React.useState("none")
     const inCity = React.useRef()
-    
+
     const [activeTab, setActiveTab] = React.useState("All")
     useEffect(() => {
         const filter = location.search.replace("%20", " ").split("=")[1]
@@ -37,8 +39,8 @@ const LandingPage = () => {
             if (!filter) { dispatch(getEvents(`?city=${selectedCity}`)) }
             else if (filter === "online") { dispatch(getEvents("?city=online")) }
             else if (filter === "free") { dispatch(getEvents(`?price=0&city=${selectedCity}`)) }
-            else if (filter === "today" || filter === "tomorrow" || filter === "this week" || filter === "this month") {
-                dispatch(getEvents(filterDate(filter, selectedCity)))
+            else if (filter === "today" || filter === "tomorrow" || filter === "this-week" || filter === "this-month") {
+                dispatch(getEvents(`?date=${filter}&city=${selectedCity}`))
             }
             else if (filter === "music" || filter === "health") { dispatch(getEvents(`?category=${filter}&city=${selectedCity}`)) }
             setActiveTab(filter || "all")
@@ -52,20 +54,23 @@ const LandingPage = () => {
                     src="./src/assets/25a38e26b1ef7e31365d99862199fffe-Eventbrite_Halloween_HomepageB_1919x543.webp" />
                 <img className="block md:hidden w-full"
                     src="./src/assets/35438e16c769f0813d6ae1d23c444b12-Eventbrite_Halloween_HomepageB_659x494.webp" />
-                <button className="bg-[#d2633b] text-white py-2 px-4 rounded-sm absolute bottom-4 left-3 md:left-10" >Find your next event</button>
+                <button className="bg-[#d2633b] text-white py-2 px-4 rounded-sm absolute bottom-4 left-3 md:left-10"
+                    onClick={() => { navigate("/search?page=1") }}>
+                    Find your next event
+                </button>
             </section>
 
             <section className="category-section flex items-center md:justify-around h-fit w-full overflow-scroll bg-slate-100 px-2 py-3 lg:py-6 gap-4" >
                 {categoryDatabase.map((value, index) => {
-                    return <CategoryButton key={index} category={value.name} src={value.imgUrl} />
+                    return <CategoryButton key={index} category={value.name} src={value.imgUrl} onClick={() => { navigate(`/search?category=${value.name.replaceAll("&", "and")}&page=1`) }} />
                 })}
             </section>
 
-            <section className="content-section flex flex-col w-full px-4 sm:px-16">
+            <section className="content-section flex flex-col w-full px-4 sm:px-16 gap-8">
                 <div className="tabs-area flex items-center w-full py-3 overflow-scroll">
                     <ul className="flex flex-row h-fit w-fit gap-4" >
                         {tabsType.map((value, index) => {
-                            return <Tabs key={index} text={value} class={activeTab === value.toLowerCase() ? "active" : ""}
+                            return <Tabs key={index} text={value.replace("-", " ")} class={activeTab === value.toLowerCase() ? "active" : ""}
                                 onClick={() => { navigate(value.toLowerCase() === 'all' ? `` : `?filter=${value.toLowerCase()}`) }} />
                         })}
                     </ul>
@@ -113,16 +118,29 @@ const LandingPage = () => {
                             </div>
                         </div>
                     </div>
-                    {eventDatabase.length ? <div className="event-cards-section flex flex-col md:flex-row gap-6 md:gap-9 flex-wrap"> {eventDatabase.map((value, index) => {
+                    {eventDatabase.length ? <div className="event-cards-section flex flex-col md:flex-row gap-6 md:gap-6 flex-wrap"> {eventDatabase.map((value, index) => {
                         return <EventCards key={index} src={value.img} onClick={() => navigate(`/e/${value.id}`)}
-                            title={value.name}
+                            title={value.name} username={value.auth.username}
                             startDate={value.startDate}
                             location={value.location ? `${value.location}, ${value.city.name}` : value.city.name}
                             price={value.ticketTypes[0] ? value.ticketTypes[0].price : "Free"} />
                     })} </div> : <Event404 />}
-                    <button className="w-[50%] max-w-[300px] m-auto mt-2 border-[2.5px] rounded-[4px] border-slate-400 px-4 py-2">See more</button>
+                    <button className="w-[50%] max-w-[300px] m-auto mt-2 border-[2.5px] rounded-[4px] border-slate-400 px-4 py-2"
+                        onClick={() => { navigate("/search?page=1") }}>
+                        See more
+                    </button>
                 </div>
 
+                <div className="promoter-list flex flex-col">
+                    <h1 className="flex items-center gap-3 font-semibold text-2xl">
+                        <IoPeople className="text-[40px]" />Popular organizers
+                    </h1>
+                    <div className="flex gap-6 overflow-scroll py-8 px-4 w-full">
+                        <PromotorCard name="Team 12" followers={168} />
+                        <PromotorCard name="Cahaya Group" followers={521} />
+                        <PromotorCard name="HealthAsia" followers={379} />
+                    </div>
+                </div>
             </section>
         </div>
     </LayoutPage>

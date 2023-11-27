@@ -9,7 +9,7 @@ const LayoutPage = (props) => {
     useEffect(() => {
         setSearchModalVisible(false)
     }, [location.pathname])
-    return <div className={`page h-screen w-screen text-[#39364F] overflow-auto`}>
+    return <div className={`page h-screen w-screen text-[#39364F]`}>
         <Navbar visible={searchModalVisible} selectedCity={props.selectedCity} onClickClose={() => { setSearchModalVisible(false) }}
             onClickOpen={() => { setSearchModalVisible(true) }}  />
         {props.children}

@@ -83,70 +83,40 @@ const EventPage = () => {
               className="md:h-[500px] md:m-auto md:absolute md:left-0 md:right-0 md:top-10 object-cover"
             />
           </div>
+          
+                <div className="event-contents flex justify-between md:mt-[65px]">
+                    <div className=" md:w-[60%] flex flex-col gap-6 p-6 lg:px-12">
+                        <div className="event-headline relative flex flex-col gap-3">
+                            <p className="lg:text-[20px] lg:font-medium" >{eventTime.date}</p>
+                            <div className="absolute right-0 top-1 flex flex-row gap-4 text-[22px]">
+                                <button><BiHeart /></button>
+                                <button><BiShareAlt /></button>
+                            </div>
+                            <h1 className="text-[24px] lg:text-[48px] font-bold">{databaseEvent[index]?.name}</h1>
+                            <p className="text-justify lg:text-[18px]">{databaseEvent[index]?.caption}</p>
+                            <div className="bg-gray-100 w-full md:w-[75%] lg:w-[50%] flex flex-col gap-2 rounded-lg py-3 px-6 mt-3">
+                                <p>By <span className="font-medium cursor-pointer">{databaseEvent[index]?.auth.username}</span></p>
+                                <p className="text-[14px]">400 followers</p>
+                                <button className="bg-blue-700 text-sm text-white rounded-md py-3" >Follow</button>
+                            </div>
+                        </div>
 
-          <div className="event-contents flex justify-between md:mt-[65px]">
-            <div className=" md:w-[60%] flex flex-col gap-6 p-6 lg:px-12">
-              <div className="event-headline relative flex flex-col gap-3">
-                <p className="lg:text-[20px] lg:font-medium">
-                  {eventTime.date}
-                </p>
-                <div className="absolute right-0 top-1 flex flex-row gap-4 text-[22px]">
-                  <button>
-                    <BiHeart />
-                  </button>
-                  <button>
-                    <BiShareAlt />
-                  </button>
-                </div>
-                <h1 className="text-[24px] lg:text-[48px] font-bold">
-                  {databaseEvent[index]?.name}
-                </h1>
-                <p className="text-justify lg:text-[18px]">
-                  {databaseEvent[index]?.caption}
-                </p>
-                <div className="bg-gray-100 w-full md:w-[75%] lg:w-[50%] flex flex-col gap-2 rounded-lg py-3 px-6 mt-3">
-                  <p>
-                    By{" "}
-                    <span className="font-medium cursor-pointer">Creator</span>
-                  </p>
-                  <p className="text-[14px]">999 followers</p>
-                  <button className="bg-blue-700 text-sm text-white rounded-md py-3">
-                    Follow
-                  </button>
-                </div>
-              </div>
+                        <div className="event-details flex flex-col gap-8">
+                            <div className="event-date-time">
+                                <h1 className="font-bold text-xl lg:text-[24px]">Date and time</h1>
+                                <div className="flex flex-row items-center gap-4 mt-2 px-1">
+                                    <BsCalendarCheck className="text-[20px] lg:text-[25px]" />
+                                    <p className="font-medium text-[15px] lg:text-[17px]">{eventTime.date} · {eventTime.startTime[0]}:{eventTime.startTime[1]} - {eventTime.endTime[0]}:{eventTime.endTime[1]} WIB</p>
+                                </div>
+                            </div>
 
-              <div className="event-details flex flex-col gap-8">
-                <div className="event-date-time">
-                  <h1 className="font-bold text-xl lg:text-[24px]">
-                    Date and time
-                  </h1>
-                  <div className="flex flex-row items-center gap-4 mt-2 px-1">
-                    <BsCalendarCheck className="text-[20px] lg:text-[25px]" />
-                    <p className="font-medium text-[15px] lg:text-[17px]">
-                      {eventTime.date} · {eventTime.startTime[0]}:
-                      {eventTime.startTime[1]} - {eventTime.endTime[0]}:
-                      {eventTime.endTime[1]} WIB
-                    </p>
-                  </div>
-                </div>
-
-                <div className="event-location">
-                  <h1 className="font-bold text-xl lg:text-[24px]">Location</h1>
-                  <div className="flex flex-row items-center gap-4 mt-2 px-1">
-                    {databaseEvent[index].city.name === "Online" ? (
-                      <BsCameraVideo className="text-[20px] lg:text-[25px]" />
-                    ) : (
-                      <FaLocationDot className="text-[20px] lg:text-[25px]" />
-                    )}
-                    <p className="font-medium text-[15px] lg:text-[17px]">
-                      {databaseEvent[index].city.name === "Online"
-                        ? "Online"
-                        : `${databaseEvent[0].location}, ${databaseEvent[0].city.name}`}
-                    </p>
-                  </div>
-                </div>
-
+                            <div className="event-location">
+                                <h1 className="font-bold text-xl lg:text-[24px]">Location</h1>
+                                <div className="flex flex-row items-center gap-4 mt-2 px-1">
+                                    {databaseEvent[index].city.name === "Online" ? <BsCameraVideo className="text-[20px] lg:text-[25px]" /> : <FaLocationDot className="text-[20px] lg:text-[25px]" />}
+                                    <p className="font-medium text-[15px] lg:text-[17px]">{databaseEvent[index].city.name === "Online" ? "Online" : `${databaseEvent[0].location}, ${databaseEvent[0].city.name}`}</p>
+                                </div>
+                            </div>
                 <div className="event-about">
                   <h1 className="font-bold text-xl lg:text-[24px]">
                     About this event
