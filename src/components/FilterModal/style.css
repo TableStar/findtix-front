@@ -2,13 +2,15 @@ div.filter-modal {
     transition: top 1s ease-in-out;
 }
 
-.filter-modal input[type=radio] {
+.filter-modal input[type=radio],
+.search-page-filters-desktop input[type=radio] {
     visibility: hidden;
     position: absolute;
-    
+
 }
 
-.filter-modal input[type=radio]+label:before {
+.filter-modal input[type=radio]+label:before,
+.search-page-filters-desktop input[type=radio]+label:before {
     height: 20px;
     width: 20px;
     margin-right: 8px;
@@ -20,6 +22,7 @@ div.filter-modal {
     cursor: pointer;
 }
 
-.filter-modal input[type=radio]:checked+label:before {
+.filter-modal input[type=radio]:checked+label:before,
+.search-page-filters-desktop input[type=radio]:checked+label:before {
     background: #d2633b
 }

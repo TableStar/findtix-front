@@ -15,7 +15,7 @@ const EventPage = () => {
     const params = useParams()
     const getEvent = async () => {
         const response = await axios.get(`http://localhost:2075/events/upcoming?id=${params.id}`)
-        setDatabaseEvent(response.data)
+        setDatabaseEvent(response.data.result)
     }
     const [databaseEvent, setDatabaseEvent] = React.useState([])
     const [eventTime, setEventTime] = React.useState({})
@@ -64,8 +64,8 @@ const EventPage = () => {
                             <h1 className="text-[24px] lg:text-[48px] font-bold">{databaseEvent[index]?.name}</h1>
                             <p className="text-justify lg:text-[18px]">{databaseEvent[index]?.caption}</p>
                             <div className="bg-gray-100 w-full md:w-[75%] lg:w-[50%] flex flex-col gap-2 rounded-lg py-3 px-6 mt-3">
-                                <p>By <span className="font-medium cursor-pointer">Creator</span></p>
-                                <p className="text-[14px]">999 followers</p>
+                                <p>By <span className="font-medium cursor-pointer">{databaseEvent[index]?.auth.username}</span></p>
+                                <p className="text-[14px]">400 followers</p>
                                 <button className="bg-blue-700 text-sm text-white rounded-md py-3" >Follow</button>
                             </div>
                         </div>

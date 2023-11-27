@@ -5,14 +5,16 @@ const eventSlice = createSlice({
     name: "event",
     initialState: {
         events: [],
+        totalEvents: 0,
         searchEvents: []
     },
     reducers: {
         setEvents: (state, action) => {
-            state.events = action.payload
+            state.events = action.payload.result
+            state.totalEvents = action.payload.totalResult
         },
         setSearchEvents: (state,action) => {
-            state.searchEvents = action.payload
+            state.searchEvents = action.payload.result
         }
     }
 })

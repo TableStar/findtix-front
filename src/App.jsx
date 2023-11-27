@@ -13,6 +13,7 @@ import { keepLogin, logout } from "./redux/slice/accountSlice";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 import PasswordChangeForm from "./pages/PassResetPage/PasswordChangeForm";
 import SearchPage from './pages/SearchPage';
+import Page404 from './pages/Page404';
 
 function App() {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
@@ -43,6 +44,7 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/auth/verifyemail" element={<VerifyEmail />} />
         <Route path="/auth/forgotpass" element={<PasswordChangeForm />} />
+        <Route path="*" element={<Page404 />} />
       </Routes>
     </div>
   );
