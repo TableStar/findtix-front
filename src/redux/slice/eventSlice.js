@@ -28,6 +28,7 @@ export const getEvents = (query = "") => {
         try {
             const resp = await API_CALL.get(`/events/upcoming${query}`)
             dispatch(setEvents(resp.data))
+            console.log("🚀 ~ file: eventSlice.js:29 ~ returnasync ~ resp:", resp)
         } catch (error) {
             console.log(error);
         }

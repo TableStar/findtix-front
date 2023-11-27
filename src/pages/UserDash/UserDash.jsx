@@ -16,6 +16,12 @@ import Toast from "../../components/Toast/Toast";
 import { Dialog } from "@headlessui/react";
 import ModalForLoading from "../../components/ModalForLoading";
 import PassForm from "../../components/PassForm";
+import ChangeUsernameForm from "../../components/UsernameAndPassForm";
+import ReferralSection from "../../components/ReferralSection";
+import { IoPersonCircleSharp } from "react-icons/io5";
+import { MdOutlineAlternateEmail } from "react-icons/md";
+import { RiGitRepositoryPrivateFill } from "react-icons/ri";
+import { FaHandshake } from "react-icons/fa";
 
 const UserDash = () => {
   const navigate = useNavigate();
@@ -37,6 +43,7 @@ const UserDash = () => {
   const [focusCompany, setFocusCompany] = useState(false);
   const [loader, setLoader] = useState(false);
   const [openToastSuccessUp, setOpenToastSuccessUp] = useState(false);
+  const [toastBodies, setToastBodies] = useState("");
   const [isOpenLoad, setIsOpenLoad] = useState(false);
   const [menu, setMenu] = useState(0);
   const dispatch = useDispatch();
@@ -48,6 +55,10 @@ const UserDash = () => {
         setIsOpenLoad(true);
         const formData = new FormData();
         formData.append("picture", event.target.files[0]);
+        console.log(
+          "🚀 ~ file: UserDash.jsx:58 ~ profilePhotoSave ~ formData:",
+          formData.get("picture")
+        );
         const response = await axios.patch(API_URL + "/profilepic", formData, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
@@ -60,6 +71,10 @@ const UserDash = () => {
         );
         dispatch(setProfilePic(API_URL + `${response.data.result}`));
         setIsOpenLoad(false);
+        setToastBodies(
+          response.data.message[0].toUpperCase() +
+            response.data.message.slice(1)
+        );
         setOpenToastSuccessUp(true);
       }
     } catch (error) {
@@ -122,6 +137,9 @@ const UserDash = () => {
     }, 300);
   }, [userPropsGlobal]);
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [menu]);
+  useEffect(() => {
     if (openToastSuccessUp) {
       setTimeout(() => {
         setOpenToastSuccessUp(false);
@@ -142,21 +160,7 @@ const UserDash = () => {
               }}
               className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
             >
-              <div className="grid place-items-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="h-5 w-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </div>
+              <IoPersonCircleSharp size={`25px`} />
               Profile Information
             </button>
             <button
@@ -167,22 +171,8 @@ const UserDash = () => {
               }}
               className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
             >
-              <div className="grid place-items-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="h-5 w-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              Change Username
+              <MdOutlineAlternateEmail size={`25px`} />
+              Change Username and Email
             </button>
             <button
               type="button"
@@ -192,22 +182,19 @@ const UserDash = () => {
               }}
               className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
             >
-              <div className="grid place-items-center mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="h-5 w-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-              </div>
+              <RiGitRepositoryPrivateFill size={`25px`} />
               Password
+            </button>
+            <button
+              type="button"
+              tabIndex="0"
+              onClick={() => {
+                setMenu(3);
+              }}
+              className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all gap-x-1 hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
+            >
+              <FaHandshake size={`25px`} />
+              Referral
             </button>
           </nav>
         </div>
@@ -216,7 +203,14 @@ const UserDash = () => {
           <div className=" px-4">
             <div className="flex flex-row-reverse py-3 w-full mx-auto">
               <p className="text-sm">
-                FindTix account since {userPropsGlobal.createdAt.split("T")[0]}
+                FindTix account since{" "}
+                {new Date(
+                  userPropsGlobal.createdAt.split("T")[0]
+                ).toLocaleDateString("en-GB", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
               </p>
             </div>
             <div>
@@ -282,7 +276,6 @@ const UserDash = () => {
                 </div>
               </div>
             </div>
-
             <div className="flex justify-between">
               <h1 className="text-xl font-bold">Account Information</h1>
             </div>
@@ -374,6 +367,27 @@ const UserDash = () => {
         ) : (
           ""
         )}
+        {menu == 1 ? (
+          <div className=" px-4">
+            <div>
+              <div className="flex justify-between">
+                <h1 className="text-xl font-bold">Your Username and Email</h1>
+              </div>
+              <div>
+                <div className="w-full h-[1px] my-4 bg-slate-300 mx-auto"></div>
+              </div>
+              <div className="flex justify-between">
+                <h6 className="text-base font-bold">
+                  Edit your Username and Email
+                </h6>
+              </div>
+              <ChangeUsernameForm />
+            </div>
+            <div></div>
+          </div>
+        ) : (
+          ""
+        )}
         {menu == 2 ? (
           <div className=" px-4">
             <div>
@@ -386,15 +400,14 @@ const UserDash = () => {
               <div className="flex justify-between">
                 <h6 className="text-base font-bold">Set a new password</h6>
               </div>
-              <PassForm/>
+              <PassForm menu={menu} setMenu={setMenu} />
             </div>
-            <div>
-              
-            </div>
+            <div></div>
           </div>
         ) : (
           ""
         )}
+        {menu == 3 ? <ReferralSection /> : ""}
       </div>
       <Dialog
         open={isOpenLoad}
@@ -410,7 +423,7 @@ const UserDash = () => {
         right="10px"
         top="110px"
         head="Success"
-        body="Picture successfully uploaded"
+        body={toastBodies}
       />
     </div>
   );

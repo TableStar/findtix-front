@@ -24,17 +24,17 @@ const Navbar = (props) => {
     const profilePic = useSelector((state) => { return state.picSliceReducer.profilepic });
 
     useEffect(() => {
-        if (userGlobal.username) {
+        if (userGlobal?.username) {
             dispatch(getPic());
             setIsLoggedIn(true)
         } else {
             setIsLoggedIn(false)
         }
-    }, [userGlobal.username])
+    }, [userGlobal?.username])
 
     return (
-        <section className="navbar flex flex-row justify-between items-center bg-white
-        w-screen h-[50px] md:h-[70px] border-b-[1px] gap-4 text-sm md:text-base px-2 md:px-8 font-medium sticky top-0 z-10" >
+        <navbar className="navbar flex flex-row justify-between items-center bg-white
+        w-screen h-[50px] md:h-[70px] border-b-[1px] gap-4 text-sm md:text-base px-2 md:px-8 font-medium sticky top-0 z-20" >
             <SearchModal visible={props.visible} selectedCity={props.selectedCity} onClick={props.onClickClose} />
             <div className="flex flex-row items-center w-[50%] gap-2 md:gap-4">
                 <p className="font-bold text-2xl cursor-pointer" onClick={() => location.pathname === "/" ? "" : navigate("/")}>Find<span className="font-black text-[#d2633b]">TIX</span></p>
@@ -124,7 +124,7 @@ const Navbar = (props) => {
                         </div>
                     </div>
                 </div>}
-        </section>
+        </navbar>
     )
 }
 

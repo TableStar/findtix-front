@@ -22,9 +22,11 @@ const LandingPage = () => {
 
     const tabsType = ["All", "Online", "Free", "Today", "Tomorrow", "This-week", "This-month", "Music", "Health"]
     const eventDatabase = useSelector((state) => { return state.eventReducer.events })
+    console.log("🚀 ~ file: index.jsx:23 ~ LandingPage ~ eventDatabase:", eventDatabase)
     const categoryDatabase = useSelector((state) => { return state.categoryReducer.categories })
     const cities = useSelector((state) => { return state.cityReducer.cities })
     const userGlobal = useSelector((state) => state.accountSliceReducer);
+    console.log("🚀 ~ file: index.jsx:27 ~ LandingPage ~ userGlobal:", userGlobal)
 
     const [selectedCity, setSelectedCity] = React.useState("Surabaya")
     const [showCities, setShowCities] = React.useState("none")

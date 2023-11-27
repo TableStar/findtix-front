@@ -19,6 +19,7 @@ const VerifyEmail = () => {
       console.log(response);
       if (response.data.message.includes("verified")) {
         alert("your account has been verified");
+        navigate("/")
       }
     } catch (error) {
       console.log(error);
