@@ -7,13 +7,14 @@ import { MdMyLocation, MdOutlineLiveTv } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { getCities } from "../../redux/slice/citySlice";
 import { getSearchEvents } from "../../redux/slice/eventSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Event404 from "../../components/Event404";
 import { getLocation } from "../../helper";
 
 const SearchModal = (props) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const location = useLocation()
     const [searchVisible, setSearchVisible] = React.useState(false)
     const [position, setPosition] = React.useState("100vh")
 
@@ -28,6 +29,7 @@ const SearchModal = (props) => {
         inCity.current.value = props.selectedCity || "Surabaya"
         dispatch(getSearchEvents(`?city=${props.selectedCity || "Surabaya"}`))
     }, [props.selectedCity])
+
     useEffect(() => {
         dispatch(getSearchEvents(`?city=${selectedCity}`))
     }, [selectedCity])
@@ -56,13 +58,15 @@ const SearchModal = (props) => {
         <a className="search-modal-btn absolute top-1 right-1 text-[22px] p-[10px]" onClick={props.onClick} href="#">
             <AiOutlineClose />
         </a>
-        <p className="font-bold text-2xl cursor-pointer absolute top-3 left-5" onClick={() => navigate("/")}>Find<span className="font-black text-[#d2633b]">TIX</span></p>
+        <p className="font-bold text-2xl cursor-pointer absolute top-3 left-5" onClick={() => location.pathname === "/" ? "" : navigate("/")}>Find<span className="font-black text-[#d2633b]">TIX</span></p>
         <div className="search-modal-header flex flex-col w-[100%] md:w-[50%]  gap-4">
             <div className="search-input flex flex-row max-w-[500px] gap-4 items-center">
                 <AiOutlineSearch className="text-[32px]" />
                 <input type="text" className="py-2 border-b-[4px] w-[80%] text-[25px]" placeholder="Search for anything"
                     onChange={(e) => { dispatch(getSearchEvents(`?name=${e.target.value}&city=${selectedCity}`)) }} />
-                <AiOutlineArrowRight className="text-[32px] cursor-pointer" onClick={() => { navigate(`/search`) }} />
+                <div className="cursor-pointer rounded-full hover:bg-gray-200 p-2 transition ease duration-300">
+                    <AiOutlineArrowRight className="text-[32px]" onClick={() => { navigate(`/search?page=1`) }} />
+                </div>
             </div>
             <div className="search-input relative">
                 <div className="search-input flex flex-row items-center gap-4">

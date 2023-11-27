@@ -1,0 +1,8 @@
+.categoryButton{
+    transition: all 0.3s;
+}
+
+.categoryButton:hover{
+    color: blue;
+    transform: translateY(-10px);
+}

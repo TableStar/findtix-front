@@ -1,6 +1,6 @@
 const Footer = () => {
 
-    return <section className="footer-section flex flex-col gap-4 md:gap-8 bg-[#d2633b] text-gray-50 mt-5 py-4 px-4 md:px-8">
+    return <section className="footer-section flex flex-col gap-4 md:gap-8 bg-[#d2633b] text-gray-50 mt-5 py-4 px-4 md:px-8 relative z-10">
         <div className="flex flex-col md:flex-row md:justify-between items-center text-center md:text-left gap-4">
             <div className="find-events flex flex-col gap-1">
                 <h1 className="font-medium md:text-[18px]">Find Events</h1>
