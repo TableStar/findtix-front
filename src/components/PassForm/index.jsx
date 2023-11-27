@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useReducer, useRef, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,8 +7,9 @@ import { API_URL } from "../../helper";
 import ModalForLoading from "../../components/ModalForLoading";
 import { Dialog } from "@headlessui/react";
 import { axiosInstance } from "../../config/axios";
+import Toast from "../Toast/Toast";
 
-const PassForm = () => {
+const PassForm = (props) => {
   const [inOldPass, setInOldPass] = useState("");
   const [inPassword, setInPassword] = useState("");
   const [inPasswordConfirm, setInPasswordConfirm] = useState("");
@@ -16,16 +17,15 @@ const PassForm = () => {
   const [focusPassword, setFocusPassword] = useState(false);
   const [focusConfirmPassword, setFocusConfirmPassword] = useState(false);
   const [isOpenLoad, setIsOpenLoad] = useState(false);
-  const ref = useRef();
+  const [openToastSuccessUp, setOpenToastSuccessUp] = useState(false);
+  const [toastBody, setToastBody] = useState("");
+  const refOld = useRef(null);
+  const refPass = useRef(null);
+  const refConf = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const urlParams = new URLSearchParams(window.location.search);
   const paramsToken = urlParams.get("token");
-  const resetForm = (ev) => {
-    ev.preventDefault();
-
-    ev.target.reset();
-  };
   const onClickSubmitPass = async () => {
     try {
       setIsOpenLoad(true);
@@ -45,8 +45,9 @@ const PassForm = () => {
         setIsOpenLoad(false);
         navigate("/auth/login");
       } else {
-        const response = await axiosInstance.post(
-          API_URL + "/forgotten/resetpass",
+        console.log("heres");
+        const response = await axiosInstance.patch(
+          API_URL + "/auths/changepass",
           {
             oldPassword: inOldPass,
             password: inPassword,
@@ -57,10 +58,13 @@ const PassForm = () => {
           "🚀 ~ file: PasswordChangeForm.jsx:36 ~ onClickSubmitPass ~ response:",
           response
         );
-        setIsOpenLoad(false);
+        refOld.current.value = null;
+        refPass.current.value = null;
+        refConf.current.value = null;
         setInOldPass("");
         setInPassword("");
         setInPasswordConfirm("");
+        setIsOpenLoad(false);
       }
     } catch (error) {
       console.log(error);
@@ -72,6 +76,7 @@ const PassForm = () => {
       {!paramsToken ? (
         <div className="mb-2">
           <InputBoxForm
+            innerRef={refOld}
             htmlName="Old Password"
             placeholderText="Old Password"
             focusState={focusOldPass}
@@ -79,7 +84,7 @@ const PassForm = () => {
             labelState={inOldPass}
             onChanger={(e) => setInOldPass(e.target.value)}
             names="old password"
-            inputType="text"
+            inputType="password"
             className="lg:w-80"
           />
           {focusOldPass && inOldPass.length <= 0 ? (
@@ -97,6 +102,7 @@ const PassForm = () => {
         <InputBoxForm
           htmlName="password"
           placeholderText="New Password"
+          innerRef={refPass}
           focusState={focusPassword}
           setFocusState={setFocusPassword}
           labelState={inPassword}
@@ -121,6 +127,7 @@ const PassForm = () => {
         <InputBoxForm
           htmlName="confirmPassword"
           placeholderText="Confirm Password"
+          innerRef={refConf}
           focusState={focusConfirmPassword}
           setFocusState={setFocusConfirmPassword}
           labelState={inPasswordConfirm}
@@ -145,7 +152,6 @@ const PassForm = () => {
           type="button"
           onClick={(ev) => {
             onClickSubmitPass();
-            resetForm(ev);
           }}
         >
           Submit
@@ -158,6 +164,15 @@ const PassForm = () => {
       >
         <ModalForLoading />
       </Dialog>
+      <Toast
+        type="success"
+        open={openToastSuccessUp}
+        setOpen={setOpenToastSuccessUp}
+        right="10px"
+        top="110px"
+        head="Success"
+        body="Picture successfully uploaded"
+      />
     </form>
   );
 };

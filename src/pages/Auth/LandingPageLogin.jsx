@@ -23,6 +23,7 @@ const LandingPageLogin = () => {
   const navigate = useNavigate();
   const onLogin = async () => {
     try {
+      setIsOpenLoad(true)
       const response = await axios.post(API_URL + `/auths/login`, {
         username: inUsername,
         password: inPassword,
@@ -32,16 +33,18 @@ const LandingPageLogin = () => {
         localStorage.setItem("token", response.data.result.token);
         dispatch(userLoaded(response.data.result));
       }
+      setIsOpenLoad(false)
       navigate("/");
     } catch (error) {
       console.log(error);
+      setIsOpenLoad(false)
     }
   };
   useEffect(() => {
     if (userGlobal.token) {
       navigate("/");
     }
-  }, [userGlobal.user]);
+  }, [userGlobal?.user]);
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">

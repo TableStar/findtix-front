@@ -11,7 +11,7 @@ const LayoutPage = (props) => {
     }, [location.pathname])
     return <div className={`page h-screen w-screen text-[#39364F] overflow-auto`}>
         <Navbar visible={searchModalVisible} selectedCity={props.selectedCity} onClickClose={() => { setSearchModalVisible(false) }}
-            onClickOpen={() => { setSearchModalVisible(true) }} />
+            onClickOpen={() => { setSearchModalVisible(true) }}  />
         {props.children}
         <Footer />
     </div>
