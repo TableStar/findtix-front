@@ -12,7 +12,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { IoPeople } from "react-icons/io5";
 import { MdMyLocation, MdOutlineLiveTv } from "react-icons/md";
 import { getCities } from "../../redux/slice/citySlice";
-import { getLocation } from "../../helper";
+import { API_CALL, API_URL, getLocation } from "../../helper";
 import PromotorCard from "../../components/PromotorCard";
 
 const LandingPage = () => {
@@ -27,7 +27,7 @@ const LandingPage = () => {
     const cities = useSelector((state) => { return state.cityReducer.cities })
     const userGlobal = useSelector((state) => state.accountSliceReducer);
     console.log("🚀 ~ file: index.jsx:27 ~ LandingPage ~ userGlobal:", userGlobal)
-
+    const [listPromotor, setListPromotor] = React.useState([])
     const [selectedCity, setSelectedCity] = React.useState("Surabaya")
     const [showCities, setShowCities] = React.useState("none")
     const inCity = React.useRef()
@@ -47,8 +47,15 @@ const LandingPage = () => {
         }, 50)
     }, [location.search, selectedCity])
 
+    const getPromotor = async () => {
+        const res = await API_CALL.get("/promotors")
+        setListPromotor(res.data)
+    }
+
+    useEffect(() => { getPromotor() }, [])
+    console.log(listPromotor);
     return <LayoutPage selectedCity={selectedCity} >
-        <div id="landing-page" className="text-sm md:text-base lg:text-lg">
+        <div id="landing-page" className="text-sm md:text-base lg:text-lg w-[100vw]">
             <section className="banner-section w-full relative" >
                 <img className="hidden md:block w-full"
                     src="./src/assets/25a38e26b1ef7e31365d99862199fffe-Eventbrite_Halloween_HomepageB_1919x543.webp" />
@@ -60,15 +67,15 @@ const LandingPage = () => {
                 </button>
             </section>
 
-            <section className="category-section flex items-center md:justify-around h-fit w-full overflow-scroll bg-slate-100 px-2 py-3 lg:py-6 gap-4" >
+            <section className="category-section flex items-center md:justify-around h-[25vh] md:h-[35vh] w-full overflow-x-scroll bg-slate-100 px-2 py-3 gap-4" >
                 {categoryDatabase.map((value, index) => {
                     return <CategoryButton key={index} category={value.name} src={value.imgUrl} onClick={() => { navigate(`/search?category=${value.name.replaceAll("&", "and")}&page=1`) }} />
                 })}
             </section>
 
-            <section className="content-section flex flex-col w-full px-4 sm:px-16 gap-8">
+            <section className="content-section flex flex-col w-full px-4 sm:px-16 gap-2">
                 <div className="tabs-area flex items-center w-full py-3 overflow-scroll">
-                    <ul className="flex flex-row h-fit w-fit gap-4" >
+                    <ul className="flex flex-row h-fit w-fit gap-4 text-base" >
                         {tabsType.map((value, index) => {
                             return <Tabs key={index} text={value.replace("-", " ")} class={activeTab === value.toLowerCase() ? "active" : ""}
                                 onClick={() => { navigate(value.toLowerCase() === 'all' ? `` : `?filter=${value.toLowerCase()}`) }} />
@@ -131,14 +138,16 @@ const LandingPage = () => {
                     </button>
                 </div>
 
-                <div className="promoter-list flex flex-col">
+                <div className="promoter-list flex flex-col w-full">
                     <h1 className="flex items-center gap-3 font-semibold text-2xl">
                         <IoPeople className="text-[40px]" />Popular organizers
                     </h1>
-                    <div className="flex gap-6 overflow-scroll py-8 px-4 w-full">
-                        <PromotorCard name="Team 12" followers={168} />
-                        <PromotorCard name="Cahaya Group" followers={521} />
-                        <PromotorCard name="HealthAsia" followers={379} />
+                    <div className="flex flex-row flex-wrap gap-6 overflow-x-scroll py-8 px-4 h-fit w-full">
+                        {listPromotor?.map((value) => {
+                            return <PromotorCard name={value.username} followers={Math.ceil(Math.random() * 1000)}
+                            img={value.usersProperty?.profileImage ? `${API_URL}/public/profilepic/${value.usersProperty.profileImage}` : ""}
+                            onClick={() => navigate(`/promotor-events/${value.id}`)} />
+                        })}
                     </div>
                 </div>
             </section>

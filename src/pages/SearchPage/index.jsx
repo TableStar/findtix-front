@@ -63,7 +63,7 @@ const SearchPage = () => {
         let res = Object.keys(tempQuery).map((key) => { return `${key}=${tempQuery[key]}` })
         dispatch(getEvents(`?city=${selectedCity}${"&" + res.join("&")}`))
     }, [location.search, selectedCity])
-
+    console.log(eventDatabase);
     return <LayoutPage>
         <div className="search-page px-4 min-h-[100vh] md:flex md:flex-row relative">
             <FilterModal visible={filterModalVisible} position={filterPosition} query={query1}
@@ -211,6 +211,7 @@ const SearchPage = () => {
                                 return <EventCards key={index} src={value.img} title={value.name} startDate={value.startDate}
                                     location={value.location ? `${value.location}, ${value.city.name}` : value.city.name}
                                     price={value.ticketTypes[0] ? value.ticketTypes[0].price : "Free"}
+                                    username={value.auth.username}
                                     onClick={() => navigate(`/e/${value.id}`)} />
                             })} </div> : <div className="block md:hidden"><Event404 /></div>}
                         {Object.keys(query1).length - (query1.name ? 2 : 1) ? <div className="hidden md:flex items-center gap-4 overflow-scroll">
@@ -244,10 +245,13 @@ const SearchPage = () => {
                                 return <div key={index} className="search-event-cards flex flex-row w-[100%] md:h-[25vh] cursor-pointer rounded-sm overflow-scroll "
                                     onClick={() => { navigate(`/e/${value.id}`) }}>
                                     <img src={value.img} className="w-[50%] h-[100%] object-cover" />
-                                    <div className="flex flex-col justify-center gap-1 w-[50%] px-4 py-2">
-                                        <h1 className="text-[20px] font-medium">{value.name}</h1>
-                                        <p className="text-[#cb3c09]">{date + ", " + time}</p>
-                                        <p className="text-gray-500 font-normal">{value.location ? value.location : "Online event"}</p>
+                                    <div className="flex flex-col justify-center gap-2 w-[50%] px-3 py-2">
+                                        <h1 className="text-[17px] font-medium">{value.name}</h1>
+                                        <p className="text-[#cb3c09] text-sm">{date + ", " + time + " WIB"}</p>
+                                        <p className="text-gray-500 font-normal text-sm">{value.location ? value.location : "Online event"}</p>
+                                        {value.ticketTypes.length > 1 ? <p className="text-sm font-medium">Start from {"Rp. " + value.ticketTypes[0].price.toLocaleString("id")}</p> 
+                                        : value.ticketTypes[0].price === 0 ? <p className="text-sm font-medium">Free</p> 
+                                        : <p className="text-sm font-medium">{"Rp. " + value.ticketTypes[0].price.toLocaleString("id")}</p> }
                                     </div>
                                 </div>
                             })} </div> : <div className="hidden md:block"><Event404 /></div>}
