@@ -11,6 +11,7 @@ import { API_URL } from "../../helper";
 import { GoAlertFill } from "react-icons/go";
 import ModalForLoading from "../../components/ModalForLoading";
 import ModalForResetPass from "../../components/ModalForResetPass";
+import Toast from "../../components/Toast/Toast";
 
 const LandingPageRegister = () => {
   const [inUsername, setInUsername] = useState("");
@@ -32,6 +33,9 @@ const LandingPageRegister = () => {
   const [focusConfirmPassword, setFocusConfirmPassword] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenLoad, setIsOpenLoad] = useState(false);
+  const [openToastFailUp, setOpenToastFailUp] = useState(false);
+  const [toastBodies, setToastBodies] = useState("");
+  
 
   const saveRegister = async (selectedRole) => {
     if (inUsername && inEmail && inPassword && inFirstName && inLastName) {
@@ -55,13 +59,21 @@ const LandingPageRegister = () => {
       } catch (error) {
         console.log(error);
         setIsOpenLoad(false);
-        alert(error.response.data.message);
+        setOpenToastFailUp(true);
+        setToastBodies(error.response.data.message);
       }
     } else {
-      return alert("Please fill all information");
+      setOpenToastFailUp(true);
+      setToastBodies("Please fill all information");
     }
   };
-
+  useEffect(() => {
+    if (openToastFailUp) {
+      setTimeout(() => {
+        setOpenToastFailUp(false);
+      }, 2800);
+    }
+  }, [openToastFailUp]);
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -240,6 +252,15 @@ const LandingPageRegister = () => {
                 >
                   <ModalForLoading />
                 </Dialog>
+                <Toast
+                  type="error"
+                  open={openToastFailUp}
+                  setOpen={setOpenToastFailUp}
+                  right="10px"
+                  top="60px"
+                  head="Error"
+                  body={toastBodies}
+                />
               </div>
             </form>
             <div className=" max-w-sm mx-auto text-center mb-2">

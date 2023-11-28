@@ -44,6 +44,7 @@ const UserDash = () => {
   const [focusPhone, setFocusPhone] = useState(false);
   const [focusCompany, setFocusCompany] = useState(false);
   const [openToastSuccessUp, setOpenToastSuccessUp] = useState(false);
+  const [openToastFailUp, setOpenToastFailUp] = useState(false);
   const [toastBodies, setToastBodies] = useState("");
   const [isOpenLoad, setIsOpenLoad] = useState(false);
   const [menu, setMenu] = useState(0);
@@ -81,6 +82,8 @@ const UserDash = () => {
     } catch (error) {
       console.log(error);
       setIsOpenLoad(false);
+      setOpenToastFailUp(true);
+      setToastBodies(error.response.data.message);
     }
   };
   const profilePhotoDelete = async () => {
@@ -93,8 +96,8 @@ const UserDash = () => {
       );
       dispatch(setProfilePic(""));
       setIsOpenLoad(false);
-      setToastBodies("Picture Deletion Success")
-      setOpenToastSuccessUp(true)
+      setToastBodies("Picture Deletion Success");
+      setOpenToastSuccessUp(true);
     } catch (error) {
       console.log(error);
       setIsOpenLoad(false);
@@ -114,8 +117,8 @@ const UserDash = () => {
       );
       dispatch(getUserProps());
       setIsOpenLoad(false);
-      setToastBodies("Data Change Success")
-      setOpenToastSuccessUp(true)
+      setToastBodies("Data Change Success");
+      setOpenToastSuccessUp(true);
     } catch (error) {
       console.log(error);
       setIsOpenLoad(false);
@@ -437,6 +440,15 @@ const UserDash = () => {
         type="success"
         open={openToastSuccessUp}
         setOpen={setOpenToastSuccessUp}
+        right="10px"
+        top="110px"
+        head="Success"
+        body={toastBodies}
+      />
+      <Toast
+        type="success"
+        open={openToastFailUp}
+        setOpen={setOpenToastFailUp}
         right="10px"
         top="110px"
         head="Success"
