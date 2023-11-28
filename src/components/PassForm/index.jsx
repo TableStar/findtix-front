@@ -69,6 +69,7 @@ const PassForm = (props) => {
     } catch (error) {
       console.log(error);
       setIsOpenLoad(false);
+      alert("error changing password")
     }
   };
   return (

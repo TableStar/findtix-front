@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LayoutPage from "../../components/LayoutPage";
 import { BiHeart, BiShareAlt } from "react-icons/bi";
 import { BsCalendarCheck, BsCameraVideo } from "react-icons/bs";
@@ -11,9 +11,12 @@ import "./style.css";
 import React, { useEffect } from "react";
 import axios from "axios";
 import ModalForCheckout from "../../components/ModalForCheckout";
+import { useSelector } from "react-redux";
 
 const EventPage = () => {
+  const userGlobal = useSelector((state) => state.accountSliceReducer);
   const params = useParams();
+  const navigate = useNavigate();
   const getEvent = async () => {
     const response = await axios.get(
       `http://localhost:2075/events/upcoming?id=${params.id}`
@@ -71,7 +74,7 @@ const EventPage = () => {
     };
 
     return (
-      <LayoutPage >
+      <LayoutPage>
         <div className="event-details-page">
           <div className="relative bg-gray-100 md:w-full md:h-[500px]">
             <div className="event-background-image-container w-[90%] bg-white rounded-[25px] absolute left-0 right-0 m-auto top-10">
@@ -89,34 +92,65 @@ const EventPage = () => {
           <div className="event-contents flex justify-between md:mt-[65px]">
             <div className=" md:w-[60%] flex flex-col gap-6 p-6 lg:px-12">
               <div className="event-headline relative flex flex-col gap-3">
-                <p className="lg:text-[20px] lg:font-medium" >{eventTime.date}</p>
+                <p className="lg:text-[20px] lg:font-medium">
+                  {eventTime.date}
+                </p>
                 <div className="absolute right-0 top-1 flex flex-row gap-4 text-[22px]">
-                  <button><BiHeart /></button>
-                  <button><BiShareAlt /></button>
+                  <button>
+                    <BiHeart />
+                  </button>
+                  <button>
+                    <BiShareAlt />
+                  </button>
                 </div>
-                <h1 className="text-[24px] lg:text-[48px] font-bold">{databaseEvent[index]?.name}</h1>
-                <p className="text-justify lg:text-[18px]">{databaseEvent[index]?.caption}</p>
+                <h1 className="text-[24px] lg:text-[48px] font-bold">
+                  {databaseEvent[index]?.name}
+                </h1>
+                <p className="text-justify lg:text-[18px]">
+                  {databaseEvent[index]?.caption}
+                </p>
                 <div className="bg-gray-100 w-full md:w-[75%] lg:w-[50%] flex flex-col gap-2 rounded-lg py-3 px-6 mt-3">
-                  <p>By <span className="font-medium cursor-pointer">{databaseEvent[index]?.auth.username}</span></p>
+                  <p>
+                    By{" "}
+                    <span className="font-medium cursor-pointer">
+                      {databaseEvent[index]?.auth.username}
+                    </span>
+                  </p>
                   <p className="text-[14px]">400 followers</p>
-                  <button className="bg-blue-700 text-sm text-white rounded-md py-3" >Follow</button>
+                  <button className="bg-blue-700 text-sm text-white rounded-md py-3">
+                    Follow
+                  </button>
                 </div>
               </div>
 
               <div className="event-details flex flex-col gap-8">
                 <div className="event-date-time">
-                  <h1 className="font-bold text-xl lg:text-[24px]">Date and time</h1>
+                  <h1 className="font-bold text-xl lg:text-[24px]">
+                    Date and time
+                  </h1>
                   <div className="flex flex-row items-center gap-4 mt-2 px-1">
                     <BsCalendarCheck className="text-[20px] lg:text-[25px]" />
-                    <p className="font-medium text-[15px] lg:text-[17px]">{eventTime.date} · {eventTime.startTime[0]}:{eventTime.startTime[1]} - {eventTime.endTime[0]}:{eventTime.endTime[1]} WIB</p>
+                    <p className="font-medium text-[15px] lg:text-[17px]">
+                      {eventTime.date} · {eventTime.startTime[0]}:
+                      {eventTime.startTime[1]} - {eventTime.endTime[0]}:
+                      {eventTime.endTime[1]} WIB
+                    </p>
                   </div>
                 </div>
 
                 <div className="event-location">
                   <h1 className="font-bold text-xl lg:text-[24px]">Location</h1>
                   <div className="flex flex-row items-center gap-4 mt-2 px-1">
-                    {databaseEvent[index].city.name === "Online" ? <BsCameraVideo className="text-[20px] lg:text-[25px]" /> : <FaLocationDot className="text-[20px] lg:text-[25px]" />}
-                    <p className="font-medium text-[15px] lg:text-[17px]">{databaseEvent[index].city.name === "Online" ? "Online" : `${databaseEvent[0].location}, ${databaseEvent[0].city.name}`}</p>
+                    {databaseEvent[index].city.name === "Online" ? (
+                      <BsCameraVideo className="text-[20px] lg:text-[25px]" />
+                    ) : (
+                      <FaLocationDot className="text-[20px] lg:text-[25px]" />
+                    )}
+                    <p className="font-medium text-[15px] lg:text-[17px]">
+                      {databaseEvent[index].city.name === "Online"
+                        ? "Online"
+                        : `${databaseEvent[0].location}, ${databaseEvent[0].city.name}`}
+                    </p>
                   </div>
                 </div>
                 <div className="event-about">
@@ -132,18 +166,20 @@ const EventPage = () => {
                         {eventTime.eventDuration < 60
                           ? `${eventTime.eventDuration} minutes`
                           : eventTime.eventDuration === 60
-                            ? `1 hour`
-                            : eventTime.eventDuration % 60 === 0
-                              ? `${eventTime.eventDuration / 60} hours`
-                              : `${Math.floor(eventTime.eventDuration / 60) === 1
+                          ? `1 hour`
+                          : eventTime.eventDuration % 60 === 0
+                          ? `${eventTime.eventDuration / 60} hours`
+                          : `${
+                              Math.floor(eventTime.eventDuration / 60) === 1
                                 ? "1 hour"
                                 : `${Math.floor(
-                                  eventTime.eventDuration / 60
-                                )} hours`
-                              } and ${eventTime.eventDuration % 60 === 1
+                                    eventTime.eventDuration / 60
+                                  )} hours`
+                            } and ${
+                              eventTime.eventDuration % 60 === 1
                                 ? "1 minute"
                                 : `${eventTime.eventDuration % 60} minutes`
-                              }`}
+                            }`}
                       </p>
                     </div>
                     <div className="flex flex-row items-center gap-4 mt-2 px-1">
@@ -196,10 +232,11 @@ const EventPage = () => {
                     </span>
                     <div className="flex items-center gap-2">
                       <button
-                        className={`p-1 rounded-md ${purchaseCount === 1
-                          ? "bg-[#f4f2f8] text-gray-400"
-                          : "bg-blue-700 text-white"
-                          }`}
+                        className={`p-1 rounded-md ${
+                          purchaseCount === 1
+                            ? "bg-[#f4f2f8] text-gray-400"
+                            : "bg-blue-700 text-white"
+                        }`}
                         onClick={() => setPurchaseCount(purchaseCount - 1)}
                         disabled={purchaseCount === 1 ? true : false}
                       >
@@ -218,21 +255,33 @@ const EventPage = () => {
                     {!databaseEvent[index].ticketTypes[0].price
                       ? "Free"
                       : `Rp. ${databaseEvent[
-                        index
-                      ].ticketTypes[0].price.toLocaleString("id")}`}
+                          index
+                        ].ticketTypes[0].price.toLocaleString("id")}`}
                     <IoIosInformationCircleOutline className="text-[21px] text-blue-700 cursor-pointer" />
                   </span>
                 </div>
               )}
-              <button
-                type="button"
-                onClick={() => {
-                  setOpenChk(true);
-                }}
-                className="bg-[#d2633b] text-white text-md rounded-[4px] py-2"
-              >
-                Reserve a spot
-              </button>
+              {userGlobal.token?.length > 5 ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpenChk(true);
+                  }}
+                  className="bg-[#d2633b] text-white text-md rounded-[4px] py-2"
+                >
+                  Reserve a spot
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate("/auth/register");
+                  }}
+                  className="bg-[#d2633b] text-white text-md rounded-[4px] py-2"
+                >
+                  Register
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -243,7 +292,7 @@ const EventPage = () => {
           }}
           eventTime={eventTime}
           databaseEvent={databaseEvent}
-          className="relative z-40"
+          className="!relative !z-40"
         />
       </LayoutPage>
     );

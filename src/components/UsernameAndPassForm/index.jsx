@@ -67,6 +67,7 @@ const ChangeUsernameForm = (props) => {
     } catch (error) {
       console.log(error);
       setIsOpenLoad(false);
+      alert(error.response.data.message);
     }
   };
   useEffect(() => {

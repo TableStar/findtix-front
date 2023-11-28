@@ -32,7 +32,6 @@ const LandingPageRegister = () => {
   const [focusConfirmPassword, setFocusConfirmPassword] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenLoad, setIsOpenLoad] = useState(false);
-  
 
   const saveRegister = async (selectedRole) => {
     if (inUsername && inEmail && inPassword && inFirstName && inLastName) {
@@ -56,6 +55,7 @@ const LandingPageRegister = () => {
       } catch (error) {
         console.log(error);
         setIsOpenLoad(false);
+        alert(error.response.data.message);
       }
     } else {
       return alert("Please fill all information");

@@ -22,6 +22,8 @@ import { IoPersonCircleSharp } from "react-icons/io5";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiGitRepositoryPrivateFill } from "react-icons/ri";
 import { FaHandshake } from "react-icons/fa";
+import { ImTicket } from "react-icons/im";
+import OrderAndTickets from "../../components/OrderAndTicketSe";
 
 const UserDash = () => {
   const navigate = useNavigate();
@@ -41,7 +43,6 @@ const UserDash = () => {
   const [focusLastName, setFocusLastName] = useState(false);
   const [focusPhone, setFocusPhone] = useState(false);
   const [focusCompany, setFocusCompany] = useState(false);
-  const [loader, setLoader] = useState(false);
   const [openToastSuccessUp, setOpenToastSuccessUp] = useState(false);
   const [toastBodies, setToastBodies] = useState("");
   const [isOpenLoad, setIsOpenLoad] = useState(false);
@@ -92,6 +93,8 @@ const UserDash = () => {
       );
       dispatch(setProfilePic(""));
       setIsOpenLoad(false);
+      setToastBodies("Picture Deletion Success")
+      setOpenToastSuccessUp(true)
     } catch (error) {
       console.log(error);
       setIsOpenLoad(false);
@@ -111,6 +114,8 @@ const UserDash = () => {
       );
       dispatch(getUserProps());
       setIsOpenLoad(false);
+      setToastBodies("Data Change Success")
+      setOpenToastSuccessUp(true)
     } catch (error) {
       console.log(error);
       setIsOpenLoad(false);
@@ -123,7 +128,7 @@ const UserDash = () => {
   useEffect(() => {
     dispatch(keepLogin());
     if (!userGlobal?.token) {
-      navigate("/auth/login");
+      navigate("*");
     }
     dispatch(getPic());
     dispatch(getUserProps());
@@ -152,6 +157,17 @@ const UserDash = () => {
       <div className="flex flex-row">
         <div className="fixed flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 w-full h-screen max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
           <nav className="flex flex-col gap-1 min-w-[240px] p-2 font-sans text-base font-normal text-gray-700">
+            <button
+              type="button"
+              tabIndex="0"
+              onClick={() => {
+                setMenu(4);
+              }}
+              className="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-50 hover:bg-opacity-80 focus:bg-blue-50 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none"
+            >
+              <ImTicket size={`25px`} />
+              Orders & Tickets
+            </button>
             <button
               type="button"
               tabIndex="0"
@@ -408,6 +424,7 @@ const UserDash = () => {
           ""
         )}
         {menu == 3 ? <ReferralSection /> : ""}
+        {menu == 4 ? <OrderAndTickets /> : ""}
       </div>
       <Dialog
         open={isOpenLoad}
