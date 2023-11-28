@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { getEvents } from "../../redux/slice/eventSlice";
 import Tabs from "../../components/Tabs";
 import "./style.css"
+import EventCards from "../../components/EventCards";
 
 const PromotorEventPage = () => {
     const params = useParams();
@@ -50,7 +51,7 @@ const PromotorEventPage = () => {
                 {activeTab === "About" ? "" :
                     <div className="py-4 h-fit">
                         <h1 className="font-semibold text-xl">{activeTab} events</h1>
-                        <div className="event-list flex flex-col gap-4 pt-3">
+                        <div className="event-list flex flex-col gap-4 pt-3 md:hidden">
                             {databaseEvent.map((value, index) => {
                                 let date = new Date(value.startDate).toDateString().split(" ")
                                 date[1] = `${date[1]} ${date[2]}`
@@ -72,6 +73,17 @@ const PromotorEventPage = () => {
                                                     : <p className="text-sm font-medium">{"Rp. " + value.ticketTypes[0].price.toLocaleString("id")}</p>}
                                         </div>
                                     </div>
+                                }
+                            })}
+                        </div>
+                        <div className="event-list gap-4 pt-3 hidden md:flex flex-row flex-wrap">
+                            {databaseEvent.map((value, index) => {
+                                if (value.status === activeTab) {
+                                    return <EventCards key={index} src={value.img} onClick={() => navigate(`/e/${value.id}`)}
+                                        title={value.name} username={value.auth.username}
+                                        startDate={value.startDate}
+                                        location={value.location ? `${value.location}, ${value.city.name}` : value.city.name}
+                                        price={value.ticketTypes[0] ? value.ticketTypes[0].price : "Free"} />
                                 }
                             })}
                         </div>

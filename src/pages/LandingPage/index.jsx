@@ -142,7 +142,7 @@ const LandingPage = () => {
                     <h1 className="flex items-center gap-3 font-semibold text-2xl">
                         <IoPeople className="text-[40px]" />Popular organizers
                     </h1>
-                    <div className="flex flex-row flex-wrap gap-6 overflow-x-scroll py-8 px-4 h-fit w-full">
+                    <div className="flex flex-row gap-6 overflow-x-scroll py-8 px-4 h-fit w-full">
                         {listPromotor?.map((value) => {
                             return <PromotorCard name={value.username} followers={Math.ceil(Math.random() * 1000)}
                             img={value.usersProperty?.profileImage ? `${API_URL}/public/profilepic/${value.usersProperty.profileImage}` : ""}

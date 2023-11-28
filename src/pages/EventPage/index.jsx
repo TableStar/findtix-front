@@ -21,7 +21,6 @@ const EventPage = () => {
     const response = await axios.get(
       `http://localhost:2075/events/upcoming?id=${params.id}`
     );
-
     setDatabaseEvent(response.data.result);
   };
   const [databaseEvent, setDatabaseEvent] = React.useState([]);
@@ -58,9 +57,8 @@ const EventPage = () => {
       });
     }
   }, [databaseEvent]);
-
+  
   const [purchaseCount, setPurchaseCount] = React.useState(1);
-  console.log(eventTime);
   if (databaseEvent.length && eventTime.startTime) {
     const printTags = () => {
       return databaseEvent[0].tags.map((value, index) => (
@@ -267,7 +265,8 @@ const EventPage = () => {
                   onClick={() => {
                     setOpenChk(true);
                   }}
-                  className="bg-[#d2633b] text-white text-md rounded-[4px] py-2"
+                  className="bg-[#d2633b] text-white text-md rounded-[4px] py-2" disabled={userGlobal.role === "creator" ? true : false}
+                  style={{backgroundColor: userGlobal.role === "creator" ? "gray" : ""}}
                 >
                   Reserve a spot
                 </button>

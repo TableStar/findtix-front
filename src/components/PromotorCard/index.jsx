@@ -1,7 +1,7 @@
 import "./style.css"
 const PromotorCard = (props) => {
 
-    return <div className="promotor-card flex flex-col justify-between py-3 items-center w-[200px] h-[270px] rounded-md" onClick={props.onClick}>
+    return <div className="promotor-card flex flex-col justify-between py-3 items-center min-w-[200px] h-[270px] rounded-md" onClick={props.onClick}>
         <div className="w-full flex flex-col items-center gap-2">
             <div className="w-[50%] h-[100px] cursor-pointer rounded-full">
                 <img src={props.img || "https://cdn-icons-png.flaticon.com/512/6596/6596121.png"} className="w-[100%] h-[100%] object-cover rounded-full" />
