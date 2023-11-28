@@ -6,6 +6,7 @@ import { getEvents } from "../../redux/slice/eventSlice";
 import Tabs from "../../components/Tabs";
 import "./style.css"
 import EventCards from "../../components/EventCards";
+import Toast from "../../components/Toast/Toast";
 
 const PromotorEventPage = () => {
     const params = useParams();
@@ -16,15 +17,23 @@ const PromotorEventPage = () => {
     const totalEvents = useSelector((state) => { return state.eventReducer.totalEvents })
 
     const [activeTab, setActiveTab] = React.useState("Upcoming")
+    const [openToastSuccessUp, setOpenToastSuccessUp] = React.useState(false)
 
     useEffect(() => {
         dispatch(getEvents(`?creatorId=${params.id}&page=1&status=all`))
     }, [])
 
+    useEffect(() => {
+        if (openToastSuccessUp) {
+            setTimeout(() => {
+                setOpenToastSuccessUp(false);
+            }, 2800);
+        }
+    }, [openToastSuccessUp]);
     return <LayoutPage>
         <div className="promotor-events-page w-full min-h-screen px-1 pb-2 pt-8 flex flex-col gap-4 items-center">
-            <div className="promotor-events-page-header flex flex-col items-center w-[80%] gap-6">
-                <h1 className="font-semibold text-2xl text-slate-900">{databaseEvent[0]?.auth.username}</h1>
+            <div className="promotor-events-page-header flex flex-col items-center w-[80%] md:w-[50%] gap-6 md:shadow-lg md:shadow-slate-400 rounded-lg md:py-4 md:px-4">
+                <h1 className="font-semibold text-2xl md:text-4xl md:mb-8 text-slate-900">{databaseEvent[0]?.auth.username}</h1>
                 <div className="flex justify-around w-full">
                     <div className="w-[50%] flex flex-col items-center">
                         <p className="font-semibold text-lg">13.3K</p>
@@ -35,7 +44,7 @@ const PromotorEventPage = () => {
                         <span className="text-gray-600">Total events</span>
                     </div>
                 </div>
-                <button className="bg-[#3d64ff] text-white w-full py-2 rounded-md">Follow</button>
+                <button className="bg-[#3d64ff] text-white w-full py-2 rounded-md md:w-[40%]">Follow</button>
             </div>
             <section className="content-section w-[90%] pt-8 pb-2">
                 <div className="tabs-area">
@@ -61,7 +70,7 @@ const PromotorEventPage = () => {
                                 time = time[0] + ":" + time[1]
                                 if (value.status === activeTab) {
                                     return <div key={index} className="promotor-event-page-cards w-full flex h-[125px] cursor-pointer"
-                                        onClick={() => { activeTab === "Upcoming" ? navigate(`/e/${value.id}`) : "" }}>
+                                        onClick={() => { activeTab === "Upcoming" ? navigate(`/e/${value.id}`) : setOpenToastSuccessUp(true) }}>
                                         <div className="w-[30%] h-full">
                                             <img src={value.img} className="w-full h-full object-cover" />
                                         </div>
@@ -79,7 +88,7 @@ const PromotorEventPage = () => {
                         <div className="event-list gap-4 pt-3 hidden md:flex flex-row flex-wrap">
                             {databaseEvent.map((value, index) => {
                                 if (value.status === activeTab) {
-                                    return <EventCards key={index} src={value.img} onClick={() => navigate(`/e/${value.id}`)}
+                                    return <EventCards key={index} src={value.img} onClick={() => { activeTab === "Upcoming" ? navigate(`/e/${value.id}`) : setOpenToastSuccessUp(true) }}
                                         title={value.name} username={value.auth.username}
                                         startDate={value.startDate}
                                         location={value.location ? `${value.location}, ${value.city.name}` : value.city.name}
@@ -89,6 +98,15 @@ const PromotorEventPage = () => {
                         </div>
                     </div>}
             </section>
+            <Toast
+                type="error"
+                open={openToastSuccessUp}
+                setOpen={setOpenToastSuccessUp}
+                top="90px"
+                left="10px"
+                head="error"
+                body={"Event already completed."}
+            />
         </div>
     </LayoutPage>
 }
