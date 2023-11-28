@@ -82,10 +82,9 @@ const Toast = (props) => {
     }
   };
   return (
-    <div className={`${props.open?`block`:`none`} fixed right-[${props.right}] top-[${props.top}]`}
+    <div className={`${props.open?`block`:`none`} z-40 fixed right-[${props.right}] top-[${props.top}]`}
       style={{
         display: props.open ? "block" : "none",
-        position: "fixed",
         right: props.right,
         top: props.top,
         left: props.left,

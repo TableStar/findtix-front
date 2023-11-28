@@ -8,6 +8,7 @@ import { userLoaded } from "../../redux/slice/accountSlice";
 import ModalForResetPass from "../../components/ModalForResetPass";
 import ModalForLoading from "../../components/ModalForLoading";
 import { Dialog } from "@headlessui/react";
+import Toast from "../../components/Toast/Toast";
 // import { loginAction } from "../redux/action/accountAction";
 
 const LandingPageLogin = () => {
@@ -17,6 +18,8 @@ const LandingPageLogin = () => {
   const [isOpenLoad, setIsOpenLoad] = useState(false);
   const [focusUsername, setFocusUsername] = useState(false);
   const [focusPassword, setFocusPassword] = useState(false);
+  const [openToastFailUp, setOpenToastFailUp] = useState(false);
+  const [toastBodies, setToastBodies] = useState("");
 
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const dispatch = useDispatch();
@@ -38,7 +41,8 @@ const LandingPageLogin = () => {
     } catch (error) {
       console.log(error);
       setIsOpenLoad(false);
-      alert(error.response.data.message);
+      setOpenToastFailUp(true);
+      setToastBodies(error.response.data.message);
     }
   };
   useEffect(() => {
@@ -46,6 +50,13 @@ const LandingPageLogin = () => {
       navigate("/");
     }
   }, [userGlobal?.user]);
+  useEffect(() => {
+    if (openToastFailUp) {
+      setTimeout(() => {
+        setOpenToastFailUp(false);
+      }, 2800);
+    }
+  }, [openToastFailUp]);
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -150,6 +161,15 @@ const LandingPageLogin = () => {
                   onClickforX={() => setIsOpenForgot(!isOpenForgot)}
                 />
               </Dialog>
+              <Toast
+                type="error"
+                open={openToastFailUp}
+                setOpen={setOpenToastFailUp}
+                right="10px"
+                top="60px"
+                head="Error"
+                body={toastBodies}
+              />
             </form>
             <div className=" max-w-sm mx-auto text-center mt-12 mb-6">
               <p className=" text-black text-sm">
