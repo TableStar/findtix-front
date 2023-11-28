@@ -25,7 +25,7 @@ const EventCards = (props) => {
             </div>
             <div className="flex flex-col gap-[2px] text-sm font-[450]">
                 <p>by <span className="text-base font-medium text-blue-700">{props.username}</span></p>
-                <p className="flex items-center gap-1"><IoPersonOutline className="text-lg" /> 123 followers</p>
+                <p className="flex items-center gap-1"><IoPersonOutline className="text-lg" />827 followers</p>
             </div>
         </div>
     </div>

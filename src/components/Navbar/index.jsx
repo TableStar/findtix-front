@@ -37,7 +37,7 @@ const Navbar = (props) => {
     const handleClickCreateEvent = () => {
         navigate('/create')
     }
-    
+
     return (
         <div className="navbar flex flex-row justify-between items-center bg-white
         w-screen h-[50px] md:h-[70px] border-b-[1px] gap-4 text-sm md:text-base px-2 md:px-8 font-medium sticky top-0 z-20" >
@@ -52,8 +52,8 @@ const Navbar = (props) => {
             </div>
             {isLoggedIn ? <div className="navbar-btn cursor-pointer flex flex-row items-center gap-2 lg:gap-8">
                 <p className="hidden lg:block text-gray-500 hover:text-black font-normal py-4 px-2"
-                    onClick={() => { navigate("/search?page=1") }}>
-                    Find events
+                    onClick={() => { userGlobal.role === "creator" ? navigate("/create") : navigate("/search?page=1") }}>
+                    {userGlobal.role === "creator" ? "Create events" : "Find events"}
                 </p>
                 <div className="hidden md:flex flex-col items-center w-[60px] py-2 text-gray-500 hover:text-black">
                     <IoMdHeartEmpty className="text-2xl text-black" />
@@ -70,8 +70,9 @@ const Navbar = (props) => {
                         {smMenu ? <IoIosArrowUp /> : <IoIosArrowDown />}
                     </div>
                     <div className="dropdown-content absolute bg-white w-[250px] text-base font-normal mt-[5px] right-0" style={{ display: smMenu ? "block" : "none" }}>
-                        <div className="lg:hidden">Create Events</div>
-                        <div className="lg:hidden">Find Events</div>
+                        <div className="lg:hidden" onClick={() => { userGlobal.role === "creator" ? navigate("/create") : navigate("/search?page=1") }}>
+                            {userGlobal.role === "creator" ? "Create events" : "Find events"}
+                        </div>
                         <div className="md:hidden">My tickets</div>
                         <div className="md:hidden">Liked</div>
                         <div>Following</div>

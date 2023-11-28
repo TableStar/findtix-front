@@ -276,7 +276,7 @@ const SearchPage = () => {
                 </div>
             </div>
             <div className="peta hidden lg:flex w-[30vw] min-h-[100vh] fixed right-0 z-0">
-                <img src="https://vemaps.com/uploads/img/large/id-04.jpg " className="cover" />
+                <img src="https://media.istockphoto.com/id/974238866/photo/audience-listens-to-the-lecturer-at-the-conference.jpg?s=612x612&w=0&k=20&c=p_BQCJWRQQtZYnQlOtZMzTjeB_csic8OofTCAKLwT0M=" className="object-cover" />
             </div>
         </div>
     </LayoutPage>

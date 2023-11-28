@@ -58,12 +58,12 @@ const LandingPage = () => {
         <div id="landing-page" className="text-sm md:text-base lg:text-lg w-[100vw]">
             <section className="banner-section w-full relative" >
                 <img className="hidden md:block w-full"
-                    src="./src/assets/25a38e26b1ef7e31365d99862199fffe-Eventbrite_Halloween_HomepageB_1919x543.webp" />
+                    src="https://cdn.evbstatic.com/s3-build/fe/build/images/9e6e793b12fb510a59dac0cc40060515-Eventbrite_Holiday_HomepageB_1067x312.webp" />
                 <img className="block md:hidden w-full"
-                    src="./src/assets/35438e16c769f0813d6ae1d23c444b12-Eventbrite_Halloween_HomepageB_659x494.webp" />
-                <button className="bg-[#d2633b] text-white py-2 px-4 rounded-sm absolute bottom-4 left-3 md:left-10"
-                    onClick={() => { navigate("/search?page=1") }}>
-                    Find your next event
+                    src="https://cdn.evbstatic.com/s3-build/fe/build/images/0003ae263356f8b2b8ac521ef59f9cb6-Eventbrite_Holiday_HomepageB_659x494.webp" />
+                <button className="bg-[#d2633b] text-white py-2 px-4 rounded-sm absolute bottom-4 left-3 md:left-10 text-base"
+                    onClick={() => { userGlobal.role === "creator" ? navigate("/create") : navigate("/search?page=1") }}>
+                    { userGlobal.role === "creator" ? "Create your own event" : "Find your next event" }
                 </button>
             </section>
 
@@ -145,8 +145,8 @@ const LandingPage = () => {
                     <div className="flex flex-row gap-6 overflow-x-scroll py-8 px-4 h-fit w-full">
                         {listPromotor?.map((value) => {
                             return <PromotorCard name={value.username} followers={Math.ceil(Math.random() * 1000)}
-                            img={value.usersProperty?.profileImage ? `${API_URL}/public/profilepic/${value.usersProperty.profileImage}` : ""}
-                            onClick={() => navigate(`/promotor-events/${value.id}`)} />
+                                img={value.usersProperty?.profileImage ? `${API_URL}/public/profilepic/${value.usersProperty.profileImage}` : ""}
+                                onClick={() => navigate(`/promotor-events/${value.id}`)} />
                         })}
                     </div>
                 </div>
