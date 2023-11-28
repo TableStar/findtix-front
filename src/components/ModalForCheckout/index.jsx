@@ -97,6 +97,7 @@ const ModalForCheckout = (props) => {
       window.open(response.data.result.redirect_url);
     } catch (error) {
       console.log(error);
+      alert(error.response.data.message);
     }
   };
   const OrderList = (data) => {
@@ -137,13 +138,7 @@ const ModalForCheckout = (props) => {
       sum += basket[i].price * basket[i].quantity;
     }
     setSubTotalPrice(sum);
-    setTotalPrice(
-      sum +
-        2000 *
-          basket.reduce((acc, val) => {
-            return acc + val.quantity;
-          }, 0)
-    );
+    setTotalPrice(sum + 2000 * ticketCount);
   };
   useEffect(() => {
     dispatch(getUserProps());

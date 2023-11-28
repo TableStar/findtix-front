@@ -23,7 +23,7 @@ const LandingPageLogin = () => {
   const navigate = useNavigate();
   const onLogin = async () => {
     try {
-      setIsOpenLoad(true)
+      setIsOpenLoad(true);
       const response = await axios.post(API_URL + `/auths/login`, {
         username: inUsername,
         password: inPassword,
@@ -33,11 +33,12 @@ const LandingPageLogin = () => {
         localStorage.setItem("token", response.data.result.token);
         dispatch(userLoaded(response.data.result));
       }
-      setIsOpenLoad(false)
+      setIsOpenLoad(false);
       navigate("/");
     } catch (error) {
       console.log(error);
-      setIsOpenLoad(false)
+      setIsOpenLoad(false);
+      alert(error.response.data.message);
     }
   };
   useEffect(() => {

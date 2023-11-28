@@ -14,9 +14,10 @@ const PasswordChangeForm = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const paramsToken = urlParams.get("token");
   console.log(paramsToken);
+  const navigate = useNavigate();
   useEffect(() => {
     if (!paramsToken?.length > 0) {
-      navigate("/");
+      navigate("*");
     }
   });
   return (

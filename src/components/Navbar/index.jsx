@@ -39,7 +39,7 @@ const Navbar = (props) => {
     }
     
     return (
-        <navbar className="navbar flex flex-row justify-between items-center bg-white
+        <div className="navbar flex flex-row justify-between items-center bg-white
         w-screen h-[50px] md:h-[70px] border-b-[1px] gap-4 text-sm md:text-base px-2 md:px-8 font-medium sticky top-0 z-20" >
             <SearchModal visible={props.visible} selectedCity={props.selectedCity} onClick={props.onClickClose} />
             <div className="flex flex-row items-center w-[50%] gap-2 md:gap-4">
@@ -130,7 +130,7 @@ const Navbar = (props) => {
                         </div>
                     </div>
                 </div>}
-        </navbar>
+        </div>
     )
 }
 
