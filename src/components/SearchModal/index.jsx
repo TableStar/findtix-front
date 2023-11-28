@@ -125,9 +125,9 @@ const SearchModal = (props) => {
                         navigate(`/e/${value.id}`)
                     }} className="search-event-cards flex flex-row w-[100%] h-[20vh] cursor-pointer">
                         <div className="flex flex-col justify-center gap-1 w-[50%] px-4 py-2">
-                            <h1 className="text-[20px]">{value.name}</h1>
-                            <p className="text-[#cb3c09]">{date + ", " + time}</p>
-                            <p className="text-gray-500 font-normal">{value.location ? value.location : "Online event"}</p>
+                            <h1 className="text-[17px]">{value.name}</h1>
+                            <p className="text-[#cb3c09] text-sm">{date + ", " + time + " WIB"}</p>
+                            <p className="text-gray-500 font-normal text-sm">{value.location ? value.location : "Online event"}</p>
                         </div>
                         <img src={value.img} className="w-[50%] h-[100%] object-cover" />
                     </div>
