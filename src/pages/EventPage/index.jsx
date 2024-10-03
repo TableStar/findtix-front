@@ -19,10 +19,10 @@ const EventPage = () => {
   const params = useParams();
   const navigate = useNavigate();
   const getEvent = async () => {
-    const response = await axios.get(
-      `https:/api.findtix.tableworks.site/events/upcoming?id=${params.id}`
-    );
-    console.log("here");
+    // const response = await axios.get(
+    //   `https:/api.findtix.tableworks.site/events/upcoming?id=${params.id}`
+    // );
+    const response = await API_CALL.get(`/events/upcoming?id=${params.id}`);
     setDatabaseEvent(response.data.result);
   };
   const [databaseEvent, setDatabaseEvent] = React.useState([]);
