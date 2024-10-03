@@ -19,9 +19,10 @@ const EventPage = () => {
   const params = useParams();
   const navigate = useNavigate();
   const getEvent = async () => {
-    const response = await API_CALL.get(
-      `/events/upcoming?id=${params.id}`
+    const response = await axios.get(
+      `http:/api.findtix.tableworks.site/events/upcoming?id=${params.id}`
     );
+    console.log("here");
     setDatabaseEvent(response.data.result);
   };
   const [databaseEvent, setDatabaseEvent] = React.useState([]);
@@ -58,7 +59,7 @@ const EventPage = () => {
       });
     }
   }, [databaseEvent]);
-  
+
   const [purchaseCount, setPurchaseCount] = React.useState(1);
   if (databaseEvent.length && eventTime.startTime) {
     const printTags = () => {
@@ -266,8 +267,12 @@ const EventPage = () => {
                   onClick={() => {
                     setOpenChk(true);
                   }}
-                  className="bg-[#d2633b] text-white text-md rounded-[4px] py-2" disabled={userGlobal.role === "creator" ? true : false}
-                  style={{backgroundColor: userGlobal.role === "creator" ? "gray" : ""}}
+                  className="bg-[#d2633b] text-white text-md rounded-[4px] py-2"
+                  disabled={userGlobal.role === "creator" ? true : false}
+                  style={{
+                    backgroundColor:
+                      userGlobal.role === "creator" ? "gray" : "",
+                  }}
                 >
                   Reserve a spot
                 </button>
