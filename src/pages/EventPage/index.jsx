@@ -20,7 +20,7 @@ const EventPage = () => {
   const navigate = useNavigate();
   const getEvent = async () => {
     const response = await axios.get(
-      `http:/api.findtix.tableworks.site/events/upcoming?id=${params.id}`
+      `https:/api.findtix.tableworks.site/events/upcoming?id=${params.id}`
     );
     console.log("here");
     setDatabaseEvent(response.data.result);
