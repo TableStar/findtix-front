@@ -12,14 +12,15 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import ModalForCheckout from "../../components/ModalForCheckout";
 import { useSelector } from "react-redux";
+import { API_CALL } from "../../helper";
 
 const EventPage = () => {
   const userGlobal = useSelector((state) => state.accountSliceReducer);
   const params = useParams();
   const navigate = useNavigate();
   const getEvent = async () => {
-    const response = await axios.get(
-      `http://localhost:2075/events/upcoming?id=${params.id}`
+    const response = await API_CALL.get(
+      `/events/upcoming?id=${params.id}`
     );
     setDatabaseEvent(response.data.result);
   };
